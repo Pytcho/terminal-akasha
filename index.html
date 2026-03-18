@@ -1,1974 +1,1774 @@
-/root
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terminal Akasha — La Connaissance, Instantanément</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&family=Roboto+Mono:wght@300;400;500&family=Product+Sans:wght@400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<title>P.HOSPI — Croix-Rouge Française</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,600;0,6..12,700;0,6..12,800;0,6..12,900;1,6..12,300;1,6..12,400&family=Playfair+Display:ital,wght@0,700;1,400;1,700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --blue: #4285F4;
-    --red: #EA4335;
-    --yellow: #FBBC05;
-    --green: #34A853;
-    --blue-dark: #1a73e8;
-    --blue-light: #e8f0fe;
-    --blue-mid: #c5d9fb;
-    --red-light: #fce8e6;
-    --yellow-light: #fef7e0;
-    --green-light: #e6f4ea;
-    --bg: #ffffff;
-    --bg2: #f8f9fa;
-    --bg3: #f1f3f4;
-    --ink: #202124;
-    --ink2: #3c4043;
-    --muted: #5f6368;
-    --border: #dadce0;
-    --shadow: rgba(60,64,67,0.15);
-  }
 
-  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior: smooth; }
+/* ══════════════════════════════════════════
+   CHARTE GRAPHIQUE CROIX-ROUGE FRANÇAISE
+   Rouge officiel CRF : #E10013
+   Blanc : #FFFFFF
+   Gris clair : #F4F4F4
+   Gris texte : #3D3D3D
+   Gris moyen : #ABABAB
+   Noir : #1A1A1A
+══════════════════════════════════════════ */
 
-  body {
-    background: var(--bg);
-    color: var(--ink2);
-    font-family: 'Space Grotesk', 'Roboto', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* CURSOR */
-  .cursor {
-    position: fixed; width: 10px; height: 10px;
-    background: var(--blue); border-radius: 50%;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%,-50%);
-    transition: background 0.3s;
-  }
-  .cursor-ring {
-    position: fixed; width: 36px; height: 36px;
-    border: 2px solid rgba(66,133,244,0.35); border-radius: 50%;
-    pointer-events: none; z-index: 9998;
-    transition: transform 0.25s ease;
-    transform: translate(-50%,-50%);
-  }
+:root {
+  --crf-red:     #E10013;
+  --crf-red-dk:  #B5000F;
+  --crf-red-lt:  #FCECED;
+  --crf-red-mid: #F5A3A8;
+  --white:       #FFFFFF;
+  --gray-lt:     #F4F4F4;
+  --gray-bd:     #E2E2E2;
+  --gray-mid:    #ABABAB;
+  --gray-tx:     #3D3D3D;
+  --black:       #1A1A1A;
+}
 
-  /* NAV */
-  nav {
-    position: fixed; top:0; left:0; right:0; z-index:100;
-    padding: 0 3rem;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 64px;
-    background: rgba(255,255,255,0.96);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 1px 4px var(--shadow);
-  }
-  .nav-logo {
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.15rem; font-weight: 700;
-    color: var(--ink); text-decoration: none;
-    letter-spacing: -0.02em;
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-  .nav-logo-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--blue), var(--green));
-  }
-  .nav-links { display:flex; gap:0.25rem; list-style:none; }
-  .nav-links a {
-    font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem;
-    font-weight: 500; color: var(--muted);
-    text-decoration: none; padding: 0.5rem 0.9rem;
-    border-radius: 20px; transition: all 0.2s;
-  }
-  .nav-links a:hover { color: var(--blue); background: var(--blue-light); }
-  .nav-cta {
-    font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem;
-    font-weight: 600; letter-spacing: 0.01em;
-    color: #fff; background: var(--blue);
-    padding: 0.55rem 1.4rem; text-decoration: none;
-    border-radius: 24px; transition: all 0.3s;
-    box-shadow: 0 2px 8px rgba(66,133,244,0.4);
-  }
-  .nav-cta:hover { background: var(--blue-dark); box-shadow: 0 4px 16px rgba(66,133,244,0.5); transform: translateY(-1px); }
+html { scroll-behavior: smooth; }
 
-  /* HERO */
-  #hero {
-    min-height: 100vh; display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    text-align:center; position:relative;
-    padding: 0 2rem; overflow:hidden;
-    background: var(--bg);
-  }
-  .hero-bg-blobs {
-    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-  }
-  .blob {
-    position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25;
-  }
-  .blob-blue { width: 600px; height: 600px; background: var(--blue); top: -200px; right: -100px; animation: blobFloat 8s ease-in-out infinite; }
-  .blob-green { width: 400px; height: 400px; background: var(--green); bottom: -150px; left: -100px; animation: blobFloat 10s ease-in-out infinite reverse; }
-  .blob-yellow { width: 300px; height: 300px; background: var(--yellow); top: 40%; left: 10%; animation: blobFloat 12s ease-in-out infinite 2s; }
-  .blob-red { width: 250px; height: 250px; background: var(--red); bottom: 20%; right: 10%; animation: blobFloat 9s ease-in-out infinite 1s; }
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: var(--white);
+  color: var(--black);
+  overflow-x: hidden;
+}
 
-  .hero-chip {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: var(--blue-light); border: 1px solid var(--blue-mid);
-    color: var(--blue-dark); padding: 0.4rem 1rem; border-radius: 20px;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
-    letter-spacing: 0.05em; margin-bottom: 2rem;
-    opacity:0; animation: fadeUp 0.8s 0.3s forwards;
-  }
-  .hero-chip-dot { width:6px; height:6px; border-radius:50%; background:var(--blue); animation: pulse 2s infinite; }
-  .hero-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: clamp(3.5rem,10vw,8rem);
-    font-weight: 800; line-height: 1;
-    color: var(--ink); letter-spacing: -0.03em;
-    margin-bottom: 1rem;
-    opacity:0; animation: fadeUp 1s 0.5s forwards;
-  }
-  .hero-title .word-blue { color: var(--blue); }
-  .hero-title .word-red { color: var(--red); }
-  .hero-title .word-yellow { color: var(--yellow); }
-  .hero-title .word-green { color: var(--green); }
-  .hero-slogan {
-    font-size: clamp(1rem, 2.5vw, 1.5rem);
-    font-weight: 300; color: var(--muted);
-    margin-bottom: 1rem;
-    opacity:0; animation: fadeUp 0.8s 0.7s forwards;
-  }
-  .hero-desc {
-    max-width: 560px; font-size: 1rem; line-height: 1.8;
-    color: var(--muted); margin-bottom: 3rem;
-    opacity:0; animation: fadeUp 0.8s 0.9s forwards;
-  }
-  .hero-actions {
-    display:flex; gap:1rem; align-items:center; justify-content:center;
-    flex-wrap: wrap;
-    opacity:0; animation: fadeUp 0.8s 1.1s forwards;
-  }
-  .btn-primary {
-    background: var(--blue); color: #fff;
-    font-family:'Space Grotesk',sans-serif; font-size:0.9rem;
-    font-weight:600; padding:0.85rem 2.2rem;
-    text-decoration:none; cursor:none;
-    border-radius: 28px; transition: all 0.3s;
-    box-shadow: 0 4px 16px rgba(66,133,244,0.4);
-  }
-  .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(66,133,244,0.5); }
-  .btn-ghost {
-    font-family:'Space Grotesk',sans-serif; font-size:0.9rem;
-    font-weight:600; color: var(--blue);
-    text-decoration:none; cursor:none;
-    border: 2px solid var(--blue-mid);
-    padding: 0.85rem 2.2rem; border-radius: 28px;
-    display:flex; align-items:center; gap:0.5rem; transition: all 0.3s;
-  }
-  .btn-ghost:hover { background: var(--blue-light); transform: translateY(-2px); }
-  .btn-ghost::after { content:'→'; transition:transform 0.3s; }
-  .btn-ghost:hover::after { transform:translateX(4px); }
+/* ROUTING */
+.page { display: none; }
+.page.active { display: block; animation: fadeUp 0.3s ease both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%,100%{ transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+@keyframes slideIn { from{transform:translateX(-100%)} to{transform:translateX(0)} }
 
-  /* GOOGLE COLORS STRIP */
-  .g-strip {
-    display: flex; gap: 0; height: 5px;
-    margin: 0 auto; width: 120px; border-radius: 4px; overflow: hidden;
-    margin-bottom: 2rem;
-    opacity:0; animation: fadeIn 1s 1.3s forwards;
-  }
-  .g-strip div { flex: 1; }
+/* ══════════════════════
+   SVG CROSS HELPER
+══════════════════════ */
+.crf-cross {
+  display: inline-block;
+  width: 1em; height: 1em;
+  position: relative;
+  flex-shrink: 0;
+}
+.crf-cross::before,
+.crf-cross::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  border-radius: 1px;
+}
+.crf-cross::before { /* vertical */
+  width: 30%; height: 100%;
+  left: 35%; top: 0;
+}
+.crf-cross::after { /* horizontal */
+  width: 100%; height: 30%;
+  left: 0; top: 35%;
+}
 
-  .scroll-hint {
-    position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
-    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
-    opacity:0; animation: fadeIn 1s 2s forwards;
-  }
-  .scroll-line {
-    width:2px; height:48px;
-    background:linear-gradient(to bottom, var(--blue), transparent);
-    animation:scrollPulse 2s infinite; border-radius: 2px;
-  }
-  .scroll-label {
-    font-family:'JetBrains Mono',monospace; font-size:0.6rem;
-    letter-spacing:0.2em; text-transform:uppercase; color:var(--muted);
-  }
 
-  /* LAYOUT */
-  section { padding: 7rem 4rem; }
-  .section-inner { max-width:1200px; margin:0 auto; }
-  .divider { max-width:100%; height:1px; background:var(--border); }
+/* ══════════════════════════════════════════
+   NAV — Bande rouge en haut style CRF
+══════════════════════════════════════════ */
+.topbar {
+  background: var(--crf-red);
+  height: 5px;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+}
 
-  .section-tag {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: var(--blue-light); color: var(--blue-dark);
-    padding: 0.3rem 0.8rem; border-radius: 12px;
-    font-family:'JetBrains Mono',monospace; font-size:0.65rem;
-    letter-spacing:0.1em; text-transform:uppercase;
-    margin-bottom: 1.2rem;
-  }
-  .section-tag.red { background: var(--red-light); color: var(--red); }
-  .section-tag.yellow { background: var(--yellow-light); color: #b07d00; }
-  .section-tag.green { background: var(--green-light); color: var(--green); }
+nav {
+  position: fixed; top: 5px; left: 0; right: 0; z-index: 200;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-bd);
+  display: flex; align-items: stretch;
+  height: 68px;
+}
 
-  .section-title {
-    font-family:'Outfit',sans-serif;
-    font-size:clamp(2rem,4vw,3.2rem);
-    font-weight:700; line-height:1.15; color:var(--ink);
-    margin-bottom:1rem; letter-spacing:-0.02em;
-  }
-  .section-title .accent-blue { color: var(--blue); }
-  .section-title .accent-red { color: var(--red); }
-  .section-title .accent-green { color: var(--green); }
-  .section-title .accent-yellow { color: var(--yellow); }
-  .section-body { font-size:0.98rem; line-height:1.9; color:var(--muted); }
+/* Logo block rouge à gauche */
+.nav-logo-block {
+  background: var(--crf-red);
+  padding: 0 28px;
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+  min-width: 220px;
+}
+.nav-logo-block:hover { background: var(--crf-red-dk); }
 
-  /* PRESENTATION */
-  #presentation { background: var(--bg2); }
-  .pres-grid {
-    display:grid; grid-template-columns:1fr 1fr;
-    gap:5rem; align-items:center;
-  }
-  .pres-visual {
-    position: relative; display: flex; align-items: center; justify-content: center;
-  }
-  .orb-container {
-    position: relative; width: 280px; height: 280px;
-  }
-  .orb {
-    width: 100%; height: 100%; border-radius: 50%;
-    background: conic-gradient(from 0deg, var(--blue), var(--red), var(--yellow), var(--green), var(--blue));
-    animation: orbSpin 10s linear infinite;
-    filter: blur(0);
-    position: relative;
-  }
-  .orb::after {
-    content: '';
-    position: absolute; inset: 4px; border-radius: 50%;
-    background: var(--bg2);
-  }
-  .orb-inner {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    z-index: 2; text-align: center;
-  }
-  .orb-letter {
-    font-family: 'Outfit', sans-serif;
-    font-size: 3.5rem; font-weight: 800;
-    background: linear-gradient(135deg, var(--blue), var(--green));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .orb-sub {
-    font-family: 'JetBrains Mono', monospace; font-size: 0.55rem;
-    color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase;
-  }
-  .orb-ring {
-    position: absolute; border-radius: 50%; border: 1px solid;
-    top: 50%; left: 50%; transform: translate(-50%,-50%);
-    animation: ringPulse 3s ease-in-out infinite;
-  }
-  .orb-ring:nth-child(1) { width: 310px; height: 310px; border-color: rgba(66,133,244,0.2); animation-delay: 0s; }
-  .orb-ring:nth-child(2) { width: 360px; height: 360px; border-color: rgba(52,168,83,0.15); animation-delay: 0.5s; }
-  .orb-ring:nth-child(3) { width: 410px; height: 410px; border-color: rgba(251,188,5,0.1); animation-delay: 1s; }
+/* Croix CRF dans nav */
+.nav-crf-cross {
+  width: 36px; height: 36px;
+  position: relative; flex-shrink: 0;
+}
+.nav-crf-cross::before,
+.nav-crf-cross::after {
+  content: ''; position: absolute; background: white; border-radius: 2px;
+}
+.nav-crf-cross::before { width: 10px; height: 36px; left: 13px; top: 0; }
+.nav-crf-cross::after  { width: 36px; height: 10px; left: 0; top: 13px; }
 
-  .pres-content {}
-  .pres-body { font-size:1rem; line-height:1.9; color:var(--muted); margin-bottom:1.5rem; }
-  .pres-highlight {
-    background: var(--blue-light); border-left: 3px solid var(--blue);
-    padding: 1.2rem 1.5rem; border-radius: 0 8px 8px 0;
-    margin: 1.5rem 0; font-size: 0.95rem; color: var(--blue-dark);
-  }
-  .pres-highlight strong { color: var(--blue); }
+.nav-logo-text { color: white; }
+.nav-logo-main {
+  font-size: 1.1rem; font-weight: 900;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  line-height: 1;
+}
+.nav-logo-sub {
+  font-size: 0.58rem; font-weight: 400;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  opacity: 0.8; margin-top: 3px;
+  display: block;
+}
 
-  /* HOW */
-  #how { background: var(--bg); }
-  .steps {
-    display:grid; grid-template-columns:repeat(3,1fr);
-    gap:2rem; margin-top:4rem;
-  }
-  .step {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 16px; padding: 2rem;
-    opacity:0; transform:translateY(20px); transition:all 0.6s ease;
-    position: relative; overflow: hidden;
-  }
-  .step::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-  }
-  .step:nth-child(1)::before { background: var(--blue); }
-  .step:nth-child(2)::before { background: var(--red); }
-  .step:nth-child(3)::before { background: var(--green); }
-  .step.visible { opacity:1; transform:translateY(0); }
-  .step:hover { transform: translateY(-4px); box-shadow: 0 8px 32px var(--shadow); }
-  .step-num {
-    font-family:'JetBrains Mono',monospace; font-size:0.65rem;
-    letter-spacing:0.2em; margin-bottom:1.2rem;
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-  .step:nth-child(1) .step-num { color: var(--blue); }
-  .step:nth-child(2) .step-num { color: var(--red); }
-  .step:nth-child(3) .step-num { color: var(--green); }
-  .step-num-badge {
-    width: 28px; height: 28px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.7rem; font-weight: 700; color: #fff;
-  }
-  .step:nth-child(1) .step-num-badge { background: var(--blue); }
-  .step:nth-child(2) .step-num-badge { background: var(--red); }
-  .step:nth-child(3) .step-num-badge { background: var(--green); }
-  .step-title { font-family:'Outfit',sans-serif; font-size:1.3rem; font-weight:700; color:var(--ink); margin-bottom:0.7rem; }
-  .step-desc { font-size:0.88rem; line-height:1.8; color:var(--muted); }
+.nav-main {
+  flex: 1; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 40px;
+}
 
-  /* ORIGINES — timeline */
-  #origines { background: var(--bg2); }
-  .origins-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
-  .timeline-vertical { margin-top:2rem; }
-  .tv-item {
-    display: flex; gap: 1.5rem; margin-bottom: 2rem;
-    opacity:0; transform:translateX(-16px); transition:all 0.5s ease;
-  }
-  .tv-item.visible { opacity:1; transform:translateX(0); }
-  .tv-marker {
-    display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
-  }
-  .tv-dot {
-    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
-    border: 2px solid;
-  }
-  .tv-item:nth-child(1) .tv-dot { background: var(--blue); border-color: var(--blue); }
-  .tv-item:nth-child(2) .tv-dot { background: var(--red); border-color: var(--red); }
-  .tv-item:nth-child(3) .tv-dot { background: var(--yellow); border-color: var(--yellow); }
-  .tv-item:nth-child(4) .tv-dot { background: var(--green); border-color: var(--green); }
-  .tv-item:nth-child(5) .tv-dot { background: var(--blue); border-color: var(--blue); }
-  .tv-line { flex: 1; width: 2px; background: var(--border); margin-top: 4px; }
-  .tv-content {}
-  .tv-era { font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; margin-bottom:0.3rem; }
-  .tv-item:nth-child(1) .tv-era { color: var(--blue); }
-  .tv-item:nth-child(2) .tv-era { color: var(--red); }
-  .tv-item:nth-child(3) .tv-era { color: #b07d00; }
-  .tv-item:nth-child(4) .tv-era { color: var(--green); }
-  .tv-item:nth-child(5) .tv-era { color: var(--blue); }
-  .tv-title { font-family:'Outfit',sans-serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-bottom:0.3rem; }
-  .tv-desc { font-size:0.85rem; line-height:1.7; color:var(--muted); }
+.nav-service-name {
+  font-size: 0.92rem; font-weight: 700;
+  color: var(--gray-tx); letter-spacing: 0.02em;
+  border-left: 2px solid var(--gray-bd);
+  padding-left: 20px; margin-left: 4px;
+}
 
-  .origins-tech { }
-  .origins-tech h3 { font-family:'Outfit',sans-serif; font-size:1.5rem; font-weight:700; color:var(--ink); margin-bottom:1.5rem; }
-  .tech-pill-grid { display:flex; flex-wrap:wrap; gap:0.75rem; margin-bottom:2rem; }
-  .tech-pill {
-    display: flex; align-items: center; gap: 0.5rem;
-    padding: 0.5rem 1rem; border-radius: 20px;
-    font-size:0.82rem; font-weight:500; border: 1px solid;
-    opacity:0; transform:scale(0.9); transition:all 0.4s ease;
-  }
-  .tech-pill.visible { opacity:1; transform:scale(1); }
-  .tech-pill.blue { background:var(--blue-light); border-color:var(--blue-mid); color:var(--blue-dark); }
-  .tech-pill.green { background:var(--green-light); border-color:#a8dab5; color:#137333; }
-  .tech-pill.red { background:var(--red-light); border-color:#f5b7b1; color:#c5221f; }
-  .tech-pill-icon { font-size: 1rem; }
-  .neuralink-card {
-    background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-    color: #fff; border-radius: 16px; padding: 2rem;
-    margin-top: 1rem;
-  }
-  .neuralink-card h4 { font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:0.5rem; }
-  .neuralink-card p { font-size:0.88rem; line-height:1.7; opacity:0.85; }
-  .neuralink-card .nl-tag { font-family:'JetBrains Mono',monospace; font-size:0.6rem; opacity:0.7; letter-spacing:0.1em; margin-bottom:0.5rem; }
+.nav-links {
+  display: flex; align-items: center; gap: 0; list-style: none;
+}
+.nav-links button, .nav-links a {
+  background: none; border: none; cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--gray-tx); text-decoration: none;
+  padding: 0 16px; height: 68px;
+  display: flex; align-items: center;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.nav-links button:hover, .nav-links a:hover {
+  color: var(--crf-red); border-bottom-color: var(--crf-red);
+}
 
-  /* FEATURES */
-  #features { background: var(--bg); }
-  .feat-header {
-    display:grid; grid-template-columns:1fr 1fr;
-    gap:4rem; align-items:end; margin-bottom:3rem;
-  }
-  .feat-tabs {
-    display:flex; gap:0.5rem; margin-bottom:2rem; flex-wrap:wrap;
-  }
-  .feat-tab {
-    font-family:'Space Grotesk',sans-serif; font-size:0.8rem; font-weight:500;
-    color:var(--muted); padding:0.5rem 1.2rem;
-    cursor:none; border:1px solid var(--border); background:var(--bg2);
-    border-radius:20px; transition:all 0.3s;
-  }
-  .feat-tab.active { color:#fff; background:var(--blue); border-color:var(--blue); }
-  .feat-tab:hover:not(.active) { color:var(--blue); border-color:var(--blue-mid); background:var(--blue-light); }
-  .feat-panels { }
-  .feat-panel { display:none; }
-  .feat-panel.active { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
-  .feat-card {
-    background:var(--bg2); padding:2rem; border-radius:16px;
-    border: 1px solid var(--border);
-    opacity:0; transform:translateY(16px);
-    animation:cardIn 0.5s forwards;
-    transition: all 0.3s;
-  }
-  .feat-card:hover { box-shadow: 0 8px 32px var(--shadow); transform: translateY(-4px); }
-  .feat-card:nth-child(2) { animation-delay:0.08s; }
-  .feat-card:nth-child(3) { animation-delay:0.16s; }
-  .feat-card:nth-child(4) { animation-delay:0.24s; }
-  .feat-icon {
-    width: 44px; height: 44px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; margin-bottom: 1.2rem;
-  }
-  .feat-icon.blue { background: var(--blue-light); }
-  .feat-icon.red { background: var(--red-light); }
-  .feat-icon.yellow { background: var(--yellow-light); }
-  .feat-icon.green { background: var(--green-light); }
-  .feat-name { font-family:'Outfit',sans-serif; font-size:1.15rem; font-weight:700; color:var(--ink); margin-bottom:0.5rem; }
-  .feat-desc { font-size:0.88rem; line-height:1.75; color:var(--muted); }
-  .feat-detail { margin-top:1rem; font-size:0.82rem; line-height:1.7; color:var(--muted); border-top:1px solid var(--border); padding-top:1rem; }
+.nav-cta {
+  background: var(--crf-red) !important;
+  color: white !important;
+  border-bottom: none !important;
+  margin-bottom: 0 !important;
+  font-weight: 800 !important;
+  padding: 0 24px !important;
+  transition: background 0.15s !important;
+  letter-spacing: 0.07em !important;
+}
+.nav-cta:hover { background: var(--crf-red-dk) !important; color: white !important; }
 
-  /* TECH */
-  #tech { background: var(--bg2); }
-  .tech-layout { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
-  .tech-stack { display:flex; flex-direction:column; gap:0.75rem; margin-top:2.5rem; }
-  .tech-item {
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.2rem 1.5rem;
-    cursor:none; transition:all 0.2s;
-    opacity:0; transform:translateX(-16px); transition:all 0.5s ease;
-  }
-  .tech-item.visible { opacity:1; transform:translateX(0); }
-  .tech-item:hover, .tech-item.open { border-color:var(--blue); box-shadow:0 4px 16px rgba(66,133,244,0.1); }
-  .tech-item-header { display:flex; align-items:center; gap:1rem; justify-content:space-between; }
-  .tech-left { display:flex; align-items:center; gap:0.8rem; }
-  .tech-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  .tech-item:nth-child(1) .tech-dot { background: var(--blue); }
-  .tech-item:nth-child(2) .tech-dot { background: var(--red); }
-  .tech-item:nth-child(3) .tech-dot { background: var(--yellow); }
-  .tech-item:nth-child(4) .tech-dot { background: var(--green); }
-  .tech-item:nth-child(5) .tech-dot { background: var(--blue); }
-  .tech-name { font-family:'Space Grotesk',sans-serif; font-size:0.85rem; font-weight:600; color:var(--ink); }
-  .tech-pct { font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--muted); }
-  .tech-bar-wrap { height:3px; background:var(--border); margin-top:0.8rem; border-radius:4px; }
-  .tech-bar { height:100%; border-radius:4px; width:0; transition:width 1.2s ease; }
-  .tech-item:nth-child(1) .tech-bar { background: var(--blue); }
-  .tech-item:nth-child(2) .tech-bar { background: var(--red); }
-  .tech-item:nth-child(3) .tech-bar { background: var(--yellow); }
-  .tech-item:nth-child(4) .tech-bar { background: var(--green); }
-  .tech-item:nth-child(5) .tech-bar { background: var(--blue); }
-  .tech-item.visible .tech-bar { width:var(--w); }
-  .tech-detail { font-size:0.82rem; line-height:1.7; color:var(--muted); max-height:0; overflow:hidden; transition:max-height 0.4s ease, margin 0.3s; margin-top:0; }
-  .tech-item.open .tech-detail { max-height:120px; margin-top:0.8rem; }
-  .tech-arrow { font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--blue); transition:transform 0.3s; }
-  .tech-item.open .tech-arrow { transform:rotate(90deg); }
+/* Form nav */
+.nav-form-area {
+  display: none;
+  align-items: center; gap: 20px;
+}
+.nav-back-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--gray-mid); display: flex; align-items: center; gap: 6px;
+  transition: color 0.15s;
+}
+.nav-back-btn:hover { color: var(--crf-red); }
+.nav-breadcrumb {
+  font-size: 0.78rem; color: var(--gray-mid);
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-bc-sep { color: var(--gray-bd); }
+.nav-bc-current { color: var(--crf-red); font-weight: 800; }
 
-  .tech-diagram {
-    position:sticky; top:5rem;
-    display:flex; flex-direction:column; gap:0.75rem; margin-top:2.5rem;
-  }
-  .tech-layer {
-    padding:1.2rem 1.5rem; border-radius:12px; border:1px solid var(--border);
-    background:var(--bg); transition:all 0.3s; cursor:none;
-    opacity:0; transform:translateY(12px); animation-fill-mode:forwards;
-  }
-  .tech-layer.visible { opacity:1; transform:translateY(0); transition:opacity 0.5s ease, transform 0.5s ease, all 0.3s; }
-  .tech-layer:hover { border-color:var(--blue); background:var(--blue-light); }
-  .tech-layer-label { font-family:'JetBrains Mono',monospace; font-size:0.58rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.3rem; }
-  .tech-layer-title { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; color:var(--ink); }
-  .tech-layer-desc { font-size:0.78rem; color:var(--muted); margin-top:0.3rem; }
 
-  /* BENEFITS */
-  #benefits { background: var(--bg); }
-  .benefits-layout { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
-  .benefits-list { list-style:none; margin-top:2.5rem; }
-  .benefits-list li {
-    padding:1.3rem 0; border-bottom:1px solid var(--border);
-    display:flex; gap:1rem; align-items:flex-start;
-    opacity:0; transform:translateX(-16px); transition:all 0.5s ease;
-  }
-  .benefits-list li.visible { opacity:1; transform:translateX(0); }
-  .benefit-mark {
-    width: 24px; height: 24px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; font-size: 0.7rem; color: #fff; margin-top: 2px;
-  }
-  .benefit-mark.blue { background: var(--blue); }
-  .benefit-mark.green { background: var(--green); }
-  .benefit-mark.red { background: var(--red); }
-  .benefit-mark.yellow { background: var(--yellow); color: var(--ink); }
-  .benefit-text { font-size:0.93rem; line-height:1.7; color:var(--ink2); }
+/* ══════════════════════════════════════════
+   LANDING — HERO
+══════════════════════════════════════════ */
+.hero {
+  padding-top: 73px; /* topbar + nav */
+  display: grid; grid-template-columns: 55% 45%;
+  min-height: 100vh;
+  position: relative;
+}
 
-  .cases-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:2rem; }
-  .case-card {
-    background:var(--bg2); border-radius:16px; padding:1.8rem;
-    border:1px solid var(--border);
-    opacity:0; transform:scale(0.95); transition:all 0.5s ease;
-  }
-  .case-card.visible { opacity:1; transform:scale(1); }
-  .case-card:hover { transform:translateY(-4px); box-shadow:0 8px 32px var(--shadow); }
-  .case-tag { font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.8rem; display:flex; align-items:center; gap:0.5rem; }
-  .case-tag::before { content:''; width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  .case-card:nth-child(1) .case-tag { color:var(--blue); }
-  .case-card:nth-child(1) .case-tag::before { background:var(--blue); }
-  .case-card:nth-child(2) .case-tag { color:var(--green); }
-  .case-card:nth-child(2) .case-tag::before { background:var(--green); }
-  .case-card:nth-child(3) .case-tag { color:var(--red); }
-  .case-card:nth-child(3) .case-tag::before { background:var(--red); }
-  .case-card:nth-child(4) .case-tag { color:#b07d00; }
-  .case-card:nth-child(4) .case-tag::before { background:var(--yellow); }
-  .case-title { font-family:'Outfit',sans-serif; font-size:1.05rem; font-weight:700; color:var(--ink); margin-bottom:0.5rem; }
-  .case-desc { font-size:0.83rem; line-height:1.75; color:var(--muted); }
+/* Panneau gauche rouge */
+.hero-red {
+  background: var(--crf-red);
+  padding: 72px 64px 72px 60px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+}
 
-  /* BUSINESS MODEL */
-  #business { background: var(--bg2); }
-  .business-layout { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
-  .partner-card {
-    background: linear-gradient(135deg, var(--blue-light), var(--green-light));
-    border: 1px solid var(--blue-mid); border-radius: 20px; padding: 2.5rem;
-    margin-top: 2rem; position: relative; overflow: hidden;
-  }
-  .partner-card::before {
-    content: 'G'; position: absolute; right: -0.5rem; top: -1rem;
-    font-family:'Outfit',sans-serif; font-size: 8rem; font-weight:800;
-    color: rgba(66,133,244,0.07); pointer-events:none;
-  }
-  .partner-title { font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:700; color:var(--ink); margin-bottom:0.5rem; }
-  .partner-sub { font-size:0.85rem; color:var(--muted); margin-bottom:1.5rem; line-height:1.7; }
-  .partner-logos { display:flex; gap:1rem; flex-wrap:wrap; }
-  .partner-badge {
-    padding: 0.4rem 1rem; border-radius: 20px;
-    font-family:'Space Grotesk',sans-serif; font-size:0.78rem; font-weight:600;
-    border: 1px solid;
-  }
-  .partner-badge.google { background:var(--blue-light); border-color:var(--blue-mid); color:var(--blue-dark); }
-  .partner-badge.edu { background:var(--green-light); border-color:#a8dab5; color:#137333; }
+/* Motif croix répété en fond */
+.hero-red::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(white 2px, transparent 2px),
+    linear-gradient(90deg, white 2px, transparent 2px);
+  background-size: 64px 64px;
+  background-position: center center;
+  opacity: 0.04;
+  pointer-events: none;
+}
 
-  .biz-model-cards { display:flex; flex-direction:column; gap:1rem; margin-top:2rem; }
-  .biz-card {
-    background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:1.5rem;
-    display:flex; gap:1rem; align-items:flex-start;
-    opacity:0; transform:translateY(12px); transition:all 0.4s ease;
-  }
-  .biz-card.visible { opacity:1; transform:translateY(0); }
-  .biz-icon { font-size:1.5rem; flex-shrink:0; }
-  .biz-label { font-family:'Outfit',sans-serif; font-size:0.95rem; font-weight:700; color:var(--ink); margin-bottom:0.3rem; }
-  .biz-detail { font-size:0.84rem; color:var(--muted); line-height:1.6; }
+/* Grande croix décorative */
+.hero-deco-cross {
+  position: absolute; right: -60px; bottom: -60px;
+  width: 300px; height: 300px; opacity: 0.07;
+  pointer-events: none;
+}
+.hero-deco-cross::before,
+.hero-deco-cross::after {
+  content: ''; position: absolute; background: white; border-radius: 4px;
+}
+.hero-deco-cross::before { width: 80px; height: 300px; left: 110px; top: 0; }
+.hero-deco-cross::after  { width: 300px; height: 80px; left: 0; top: 110px; }
 
-  /* VISION */
-  #vision { background: var(--bg); }
-  .vision-layout { display:grid; grid-template-columns:1fr 2fr; gap:5rem; align-items:start; }
-  .vision-pillars { margin-top:2.5rem; display:flex; flex-direction:column; gap:0.5rem; }
-  .vision-pillar {
-    padding: 1rem 1.2rem; border-radius: 12px; border: 1px solid var(--border);
-    background: var(--bg2);
-    opacity:0; transform:translateX(-16px); transition:all 0.5s ease;
-  }
-  .vision-pillar.visible { opacity:1; transform:translateX(0); }
-  .pillar-num { font-family:'JetBrains Mono',monospace; font-size:0.55rem; letter-spacing:0.2em; margin-bottom:0.3rem; }
-  .vision-pillar:nth-child(1) .pillar-num { color:var(--blue); }
-  .vision-pillar:nth-child(2) .pillar-num { color:var(--red); }
-  .vision-pillar:nth-child(3) .pillar-num { color:var(--yellow); }
-  .vision-pillar:nth-child(4) .pillar-num { color:var(--green); }
-  .pillar-title { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; color:var(--ink); }
-  .pillar-desc { font-size:0.83rem; line-height:1.7; color:var(--muted); margin-top:0.3rem; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 8px 16px;
+  font-size: 0.7rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 32px;
+  width: fit-content;
+  animation: fadeUp 0.5s 0.1s ease both;
+}
+.hero-badge-cross {
+  width: 14px; height: 14px; position: relative; flex-shrink: 0;
+}
+.hero-badge-cross::before,
+.hero-badge-cross::after {
+  content: ''; position: absolute; background: white; border-radius: 1px;
+}
+.hero-badge-cross::before { width: 4px; height: 14px; left: 5px; top: 0; }
+.hero-badge-cross::after  { width: 14px; height: 4px; left: 0; top: 5px; }
 
-  .vision-right {}
-  .vision-quote-block {
-    border-left: 4px solid var(--blue); padding-left:2rem; margin-bottom:3rem;
-    border-radius: 0 12px 12px 0;
-    background: var(--blue-light); padding: 1.5rem 2rem;
-    opacity:0; animation:fadeUp 0.8s 0.3s forwards;
-  }
-  .vision-quote { font-family:'Outfit',sans-serif; font-size:clamp(1.2rem,2.5vw,1.8rem); font-weight:700; line-height:1.4; color:var(--ink); margin-bottom:0.8rem; }
-  .vision-author { font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.15em; color:var(--blue); }
+.hero-h1 {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: clamp(2.4rem, 3.8vw, 3.6rem);
+  font-weight: 900; line-height: 1.08;
+  color: white; letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  animation: fadeUp 0.5s 0.15s ease both;
+}
 
-  .vision-timeline { margin-top:2.5rem; }
-  .timeline-title { font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:1.5rem; }
-  .timeline-items { display:flex; flex-direction:column; gap:0; }
-  .timeline-item {
-    display:flex; gap:2rem; padding:1.5rem 0; border-bottom:1px solid var(--border);
-    opacity:0; transform:translateY(12px); transition:all 0.5s ease;
-  }
-  .timeline-item.visible { opacity:1; transform:translateY(0); }
-  .timeline-year {
-    font-family:'Outfit',sans-serif; font-size:1rem; font-weight:800; flex-shrink:0; width:60px; padding-top:0.15rem;
-  }
-  .timeline-item:nth-child(1) .timeline-year { color:var(--blue); }
-  .timeline-item:nth-child(2) .timeline-year { color:var(--red); }
-  .timeline-item:nth-child(3) .timeline-year { color:#b07d00; }
-  .timeline-item:nth-child(4) .timeline-year { color:var(--green); }
-  .timeline-text { font-size:0.88rem; line-height:1.7; color:var(--ink2); }
-  .timeline-text strong { font-weight:700; color:var(--ink); display:block; margin-bottom:0.2rem; font-family:'Outfit',sans-serif; font-size:1rem; }
+.hero-h1-sub {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 400; font-style: italic;
+  color: rgba(255,255,255,0.75);
+  display: block; margin-bottom: 28px;
+  animation: fadeUp 0.5s 0.2s ease both;
+}
 
-  .vision-cta-strip {
-    margin-top:2rem; padding:2rem;
-    background: linear-gradient(135deg, var(--blue), var(--green));
-    border-radius:16px; display:flex; align-items:center; justify-content:space-between; gap:2rem;
-    opacity:0; animation:fadeUp 0.8s 0.6s forwards;
-  }
-  .vcta-text { font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:700; color:#fff; }
-  .vcta-text em { font-style:italic; opacity:0.85; }
-  .btn-white { background:#fff; color:var(--blue); font-family:'Space Grotesk',sans-serif; font-size:0.85rem; font-weight:700; padding:0.7rem 1.8rem; border-radius:24px; text-decoration:none; cursor:none; transition:all 0.3s; }
-  .btn-white:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.2); }
+.hero-desc {
+  font-size: 1rem; font-weight: 300; line-height: 1.75;
+  color: rgba(255,255,255,0.78);
+  max-width: 440px; margin-bottom: 44px;
+  animation: fadeUp 0.5s 0.25s ease both;
+}
 
-  /* SECURITY */
-  #security { background: var(--bg2); }
-  .security-inner { display:grid; grid-template-columns:5fr 4fr; gap:5rem; align-items:center; }
-  .security-badges { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:2rem; }
-  .badge {
-    background:var(--bg); padding:1.5rem; border-radius:12px;
-    border:1px solid var(--border);
-    opacity:0; transform:scale(0.96); transition:all 0.4s ease;
-  }
-  .badge.visible { opacity:1; transform:scale(1); }
-  .badge:hover { border-color:var(--blue); transform:translateY(-2px); box-shadow:0 4px 16px var(--shadow); }
-  .badge-icon-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem; }
-  .badge-dot { width:8px; height:8px; border-radius:50%; }
-  .badge:nth-child(1) .badge-dot { background:var(--blue); }
-  .badge:nth-child(2) .badge-dot { background:var(--green); }
-  .badge:nth-child(3) .badge-dot { background:var(--red); }
-  .badge:nth-child(4) .badge-dot { background:var(--yellow); }
-  .badge-icon { font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.12em; font-weight:500; }
-  .badge:nth-child(1) .badge-icon { color:var(--blue); }
-  .badge:nth-child(2) .badge-icon { color:var(--green); }
-  .badge:nth-child(3) .badge-icon { color:var(--red); }
-  .badge:nth-child(4) .badge-icon { color:#b07d00; }
-  .badge-text { font-size:0.82rem; line-height:1.6; color:var(--muted); }
+.hero-btns {
+  display: flex; flex-direction: column; gap: 10px;
+  max-width: 380px;
+  animation: fadeUp 0.5s 0.3s ease both;
+}
 
-  .security-visual {
-    display:flex; align-items:center; justify-content:center;
-  }
-  .shield-svg { }
+.btn-hero-w {
+  background: white; color: var(--crf-red);
+  padding: 16px 24px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.88rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.18s;
+}
+.btn-hero-w:hover { background: var(--gray-lt); transform: translateX(4px); }
 
-  /* DILEMME */
-  #dilemme { background: var(--ink); color:#fff; }
-  .dilemme-inner { max-width:800px; margin:0 auto; text-align:center; }
-  .dilemme-eyebrow { font-family:'JetBrains Mono',monospace; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--yellow); margin-bottom:1.5rem; }
-  .dilemme-title { font-family:'Outfit',sans-serif; font-size:clamp(1.8rem,4vw,3rem); font-weight:800; line-height:1.2; margin-bottom:2rem; }
-  .dilemme-question {
-    font-family:'Outfit',sans-serif; font-size:clamp(1.1rem,2.5vw,1.7rem); font-weight:300;
-    font-style:italic; color:rgba(255,255,255,0.7); margin-bottom:3rem; line-height:1.5;
-  }
-  .dilemme-cards { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; text-align:left; }
-  .d-card { border-radius:16px; padding:2rem; }
-  .d-card.pros { background:rgba(52,168,83,0.15); border:1px solid rgba(52,168,83,0.3); }
-  .d-card.cons { background:rgba(234,67,53,0.15); border:1px solid rgba(234,67,53,0.3); }
-  .d-card-title { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; margin-bottom:1rem; }
-  .d-card.pros .d-card-title { color:var(--green); }
-  .d-card.cons .d-card-title { color:var(--red); }
-  .d-list { list-style:none; display:flex; flex-direction:column; gap:0.6rem; }
-  .d-list li { font-size:0.87rem; color:rgba(255,255,255,0.75); display:flex; gap:0.6rem; align-items:flex-start; line-height:1.6; }
-  .d-list li::before { flex-shrink:0; margin-top:0.2rem; }
-  .d-card.pros .d-list li::before { content:'✓'; color:var(--green); }
-  .d-card.cons .d-list li::before { content:'✗'; color:var(--red); }
+.btn-hero-ghost {
+  background: transparent; color: white;
+  padding: 14px 24px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.88rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  border: 2px solid rgba(255,255,255,0.4); cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.18s;
+}
+.btn-hero-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); transform: translateX(4px); }
 
-  /* TESTIMONIALS */
-  #testimonials { background: var(--bg2); }
-  .testi-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:3.5rem; }
-  .testi-card {
-    background:var(--bg); border:1px solid var(--border); border-radius:16px; padding:2rem;
-    opacity:0; transform:translateY(16px); transition:all 0.5s ease;
-  }
-  .testi-card.visible { opacity:1; transform:translateY(0); }
-  .testi-card:hover { transform:translateY(-4px); box-shadow:0 8px 32px var(--shadow); }
-  .testi-stars { display:flex; gap:2px; margin-bottom:1rem; }
-  .testi-star { color:var(--yellow); font-size:0.9rem; }
-  .testi-text { font-size:0.95rem; font-weight:400; line-height:1.75; color:var(--ink2); margin-bottom:1.5rem; font-style:italic; }
-  .testi-footer { display:flex; align-items:center; gap:0.8rem; }
-  .testi-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; color:#fff; flex-shrink:0; }
-  .testi-card:nth-child(1) .testi-avatar { background:var(--blue); }
-  .testi-card:nth-child(2) .testi-avatar { background:var(--green); }
-  .testi-card:nth-child(3) .testi-avatar { background:var(--red); }
-  .testi-card:nth-child(4) .testi-avatar { background:var(--yellow); color:var(--ink); }
-  .testi-author { font-family:'Space Grotesk',sans-serif; font-size:0.8rem; font-weight:600; color:var(--ink2); }
-  .testi-role { font-size:0.72rem; color:var(--muted); }
+/* Stats sous les boutons */
+.hero-kpis {
+  display: flex; gap: 0; margin-top: 48px;
+  border-top: 1px solid rgba(255,255,255,0.18);
+  padding-top: 28px;
+  animation: fadeUp 0.5s 0.35s ease both;
+}
+.hero-kpi {
+  padding-right: 32px;
+  margin-right: 32px;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+.hero-kpi:last-child { border-right: none; }
+.hk-n {
+  font-size: 2rem; font-weight: 900; color: white;
+  letter-spacing: -0.03em; line-height: 1;
+}
+.hk-l { font-size: 0.7rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 5px; font-weight: 600; }
 
-  /* CTA */
-  #cta {
-    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 50%, var(--green) 100%);
-    text-align:center; padding:10rem 4rem; position:relative; overflow:hidden;
-  }
-  #cta::before {
-    content:''; position:absolute; inset:0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-  .cta-label { font-family:'JetBrains Mono',monospace; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.7); margin-bottom:1.5rem; }
-  .cta-title { font-family:'Outfit',sans-serif; font-size:clamp(2rem,5vw,4rem); font-weight:800; color:#fff; margin-bottom:1.2rem; line-height:1.1; letter-spacing:-0.02em; }
-  .cta-desc { color:rgba(255,255,255,0.8); font-size:1rem; margin-bottom:3rem; max-width:440px; margin-left:auto; margin-right:auto; line-height:1.8; }
-  .cta-actions { display:flex; align-items:center; justify-content:center; gap:1.2rem; flex-wrap:wrap; }
-  .btn-primary-dark {
-    background:#fff; color:var(--blue);
-    font-family:'Space Grotesk',sans-serif; font-size:0.9rem; font-weight:700;
-    padding:0.9rem 2.2rem; text-decoration:none; cursor:none;
-    border-radius:28px; transition:all 0.3s;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-  }
-  .btn-primary-dark:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(0,0,0,0.3); }
-  .btn-ghost-light {
-    font-family:'Space Grotesk',sans-serif; font-size:0.9rem; font-weight:600;
-    color:rgba(255,255,255,0.9); text-decoration:none; cursor:none;
-    border:2px solid rgba(255,255,255,0.4); padding:0.9rem 2.2rem; border-radius:28px;
-    display:flex; align-items:center; gap:0.5rem; transition:all 0.3s;
-  }
-  .btn-ghost-light:hover { background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.7); }
-  .btn-ghost-light::after { content:'→'; transition:transform 0.3s; }
-  .btn-ghost-light:hover::after { transform:translateX(4px); }
+/* Panneau droit blanc */
+.hero-white {
+  background: var(--gray-lt);
+  padding: 72px 52px 72px 64px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative;
+}
+.hero-white::before {
+  content: '';
+  position: absolute; left: 0; top: 60px; bottom: 60px;
+  width: 4px; background: var(--crf-red);
+}
 
-  /* FOOTER */
-  footer {
-    background:var(--ink); padding:4rem;
-    display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:4rem; max-width:100%;
-  }
-  .footer-brand { font-family:'Outfit',sans-serif; font-size:1.3rem; font-weight:800; color:#fff; margin-bottom:0.8rem; letter-spacing:-0.02em; }
-  .footer-brand span { color:var(--blue); }
-  .footer-tagline { font-size:0.83rem; color:rgba(255,255,255,0.5); line-height:1.7; max-width:220px; }
-  .footer-g-strip { display:flex; gap:0; height:3px; width:60px; margin-top:1rem; border-radius:2px; overflow:hidden; }
-  .footer-g-strip div { flex:1; }
-  .footer-col-title { font-family:'Space Grotesk',sans-serif; font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.4); margin-bottom:1.2rem; letter-spacing:0.05em; text-transform:uppercase; }
-  .footer-links { list-style:none; display:flex; flex-direction:column; gap:0.65rem; }
-  .footer-links a { font-size:0.87rem; color:rgba(255,255,255,0.6); text-decoration:none; transition:color 0.3s; cursor:none; }
-  .footer-links a:hover { color:#fff; }
-  .footer-bottom { background:var(--ink); border-top:1px solid rgba(255,255,255,0.1); padding:1.5rem 4rem; display:flex; justify-content:space-between; align-items:center; }
-  .footer-copy { font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:rgba(255,255,255,0.3); letter-spacing:0.05em; }
+.hw-label {
+  font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--crf-red);
+  margin-bottom: 20px;
+}
 
-  /* ANIMATIONS */
-  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-  @keyframes orbSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-  @keyframes scrollPulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
-  @keyframes cardIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(20px,-20px) scale(1.05)} }
-  @keyframes ringPulse { 0%,100%{transform:translate(-50%,-50%) scale(1); opacity:1} 50%{transform:translate(-50%,-50%) scale(1.05); opacity:0.6} }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+/* Cartes missions */
+.mission-stack { display: flex; flex-direction: column; gap: 12px; }
 
-  /* ============ MODAL INSCRIPTION ============ */
-  .modal-overlay {
-    position:fixed; inset:0; z-index:1000;
-    background:rgba(32,33,36,0.7); backdrop-filter:blur(6px);
-    display:flex; align-items:center; justify-content:center;
-    opacity:0; pointer-events:none; transition:opacity 0.3s ease;
-  }
-  .modal-overlay.open { opacity:1; pointer-events:all; }
+.mis-card {
+  background: white;
+  border-left: 3px solid var(--gray-bd);
+  padding: 20px 22px;
+  display: flex; align-items: flex-start; gap: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  animation: float 7s ease-in-out infinite;
+}
+.mis-card:nth-child(2) { animation-delay: -2.5s; border-left-color: var(--crf-red); }
+.mis-card:nth-child(3) { animation-delay: -5s; }
+.mis-card:hover { border-left-color: var(--crf-red); box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
 
-  .modal-box {
-    width:90vw; max-width:900px; max-height:90vh;
-    display:flex; border-radius:20px; overflow:hidden;
-    box-shadow:0 32px 80px rgba(0,0,0,0.35);
-    transform:translateY(32px) scale(0.97);
-    transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-  }
-  .modal-overlay.open .modal-box { transform:translateY(0) scale(1); }
+.mis-avatar {
+  width: 42px; height: 42px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; background: var(--crf-red-lt);
+}
+.mis-card.benev .mis-avatar { background: var(--crf-red); }
+.mis-body { flex: 1; }
+.mis-chip {
+  font-size: 0.62rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--crf-red);
+  margin-bottom: 3px;
+}
+.mis-card.benev .mis-chip { color: rgba(255,255,255,0.8); }
+.mis-name { font-size: 0.9rem; font-weight: 700; color: var(--black); margin-bottom: 8px; }
+.mis-card.benev .mis-name { color: white; }
+.mis-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.mis-tag {
+  background: var(--gray-lt); color: var(--gray-tx);
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 3px 8px;
+}
+.mis-card.benev .mis-tag { background: rgba(255,255,255,0.18); color: white; }
+.mis-status {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 8px; font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-mid);
+}
+.mis-dot { width: 6px; height: 6px; background: #22C55E; border-radius: 50%; animation: pulse 2s infinite; }
 
-  /* Left panel */
-  .modal-left {
-    width:42%; background:linear-gradient(160deg,var(--blue) 0%,var(--blue-dark) 40%,#0d47a1 100%);
-    display:flex; flex-direction:column; justify-content:center;
-    padding:3rem; position:relative; overflow:hidden; flex-shrink:0;
-  }
-  .modal-left .mblob { position:absolute; border-radius:50%; filter:blur(50px); opacity:0.2; pointer-events:none; }
-  .modal-left .mblob-1 { width:240px;height:240px;background:var(--green);top:-60px;right:-60px; }
-  .modal-left .mblob-2 { width:200px;height:200px;background:var(--yellow);bottom:-50px;left:-50px; }
-  .modal-left .mblob-3 { width:160px;height:160px;background:var(--red);bottom:30%;right:5%; }
-  .modal-logo { font-family:'Outfit',sans-serif;font-size:1rem;font-weight:800;color:rgba(255,255,255,0.9);margin-bottom:2rem;display:flex;align-items:center;gap:0.5rem; }
-  .modal-logo-dot { width:8px;height:8px;border-radius:50%;background:var(--yellow); }
-  .modal-mg-strip { display:flex;gap:0;height:3px;width:64px;border-radius:3px;overflow:hidden;margin-bottom:2rem; }
-  .modal-mg-strip div { flex:1; }
-  .modal-left-title { font-family:'Outfit',sans-serif;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:800;color:#fff;line-height:1.2;margin-bottom:1rem;letter-spacing:-0.02em; }
-  .modal-left-title span { color:var(--yellow); }
-  .modal-left-desc { font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.75;margin-bottom:2rem; }
-  .modal-perks { display:flex;flex-direction:column;gap:0.9rem; }
-  .modal-perk { display:flex;gap:0.7rem;align-items:flex-start; }
-  .modal-perk-icon { width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.8rem;background:rgba(255,255,255,0.15); }
-  .modal-perk-label { font-size:0.8rem;font-weight:600;color:#fff; }
-  .modal-perk-sub { font-size:0.72rem;color:rgba(255,255,255,0.55);line-height:1.4; }
-  .modal-left-quote { margin-top:2rem;padding:1rem 1.2rem;background:rgba(255,255,255,0.1);border-radius:10px;border-left:3px solid var(--yellow); }
-  .modal-left-quote p { font-size:0.8rem;font-style:italic;color:rgba(255,255,255,0.8);line-height:1.6; }
-  .modal-left-quote cite { font-size:0.65rem;color:rgba(255,255,255,0.45);margin-top:0.4rem;display:block;font-family:'JetBrains Mono',monospace; }
+/* Notification */
+.mis-notif {
+  background: var(--black); color: white;
+  border-left: 4px solid var(--crf-red);
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 8px;
+  animation: float 6s ease-in-out infinite; animation-delay: -1.2s;
+}
+.mn-icon {
+  width: 34px; height: 34px; background: var(--crf-red);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+}
+.mn-txt { font-size: 0.78rem; line-height: 1.45; }
+.mn-txt strong { display: block; font-size: 0.8rem; font-weight: 800; }
+.mn-txt span { color: rgba(255,255,255,0.5); font-size: 0.72rem; }
 
-  /* Right panel */
-  .modal-right {
-    flex:1; background:var(--bg); overflow-y:auto;
-    padding:2.5rem 2.5rem 2.5rem; position:relative;
-  }
-  .modal-close {
-    position:absolute; top:1.2rem; right:1.2rem;
-    width:36px; height:36px; border-radius:50%;
-    background:var(--bg2); border:1px solid var(--border);
-    display:flex; align-items:center; justify-content:center;
-    cursor:none; font-size:1rem; color:var(--muted);
-    transition:all 0.2s; z-index:10;
-  }
-  .modal-close:hover { background:var(--red-light); color:var(--red); border-color:var(--red); }
+/* ══════════════════════
+   BANDEAU CRF OFFICIEL
+══════════════════════ */
+.crf-band {
+  background: var(--crf-red);
+  padding: 0 60px;
+  display: flex; align-items: center;
+  overflow: hidden;
+  height: 52px;
+  gap: 0;
+}
+.crf-band-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: rgba(255,255,255,0.8);
+  white-space: nowrap; padding: 0 32px;
+  border-right: 1px solid rgba(255,255,255,0.18);
+  height: 100%;
+}
+.crf-band-item:first-child { padding-left: 0; }
+.crf-band-item:last-child { border-right: none; }
+.crf-band-cross {
+  width: 14px; height: 14px; position: relative; flex-shrink: 0;
+}
+.crf-band-cross::before, .crf-band-cross::after {
+  content: ''; position: absolute; background: white; border-radius: 1px;
+}
+.crf-band-cross::before { width: 4px; height: 14px; left: 5px; top: 0; }
+.crf-band-cross::after  { width: 14px; height: 4px; left: 0; top: 5px; }
 
-  /* Steps indicator */
-  .m-steps-indicator { display:flex;gap:0.4rem;align-items:center;margin-bottom:2rem; }
-  .m-step-dot { width:7px;height:7px;border-radius:50%;background:var(--border);transition:all 0.3s; }
-  .m-step-dot.active { background:var(--blue);width:20px;border-radius:4px; }
-  .m-step-dot.done { background:var(--green); }
+/* ══════════════════════════════════════════
+   SECTIONS LANDING
+══════════════════════════════════════════ */
+.lp-section { padding: 96px 60px; }
+.lp-section.bg-lt { background: var(--gray-lt); }
+.lp-section.bg-red { background: var(--crf-red); }
+.lp-section.bg-black { background: var(--black); }
 
-  /* Form pages */
-  .m-form-page { display:none; animation:fadeInUp 0.35s ease forwards; }
-  .m-form-page.active { display:block; }
+.sec-head { margin-bottom: 56px; }
+.sec-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 0.68rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--crf-red); margin-bottom: 14px;
+}
+.lp-section.bg-red .sec-tag { color: rgba(255,255,255,0.6); }
+.lp-section.bg-black .sec-tag { color: var(--crf-red); }
+.sec-tag-line { width: 32px; height: 2px; background: var(--crf-red); }
+.lp-section.bg-red .sec-tag-line { background: rgba(255,255,255,0.4); }
+.sec-h2 {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: clamp(1.9rem, 2.8vw, 2.6rem);
+  font-weight: 900; line-height: 1.12;
+  color: var(--black); letter-spacing: -0.02em;
+}
+.lp-section.bg-red .sec-h2,
+.lp-section.bg-black .sec-h2 { color: white; }
+.sec-h2 em {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400;
+  color: var(--crf-red);
+}
+.lp-section.bg-red .sec-h2 em { color: rgba(255,255,255,0.65); }
+.sec-sub {
+  font-size: 0.98rem; font-weight: 300; line-height: 1.75;
+  color: var(--gray-tx); max-width: 500px; margin-top: 10px;
+}
+.lp-section.bg-red .sec-sub,
+.lp-section.bg-black .sec-sub { color: rgba(255,255,255,0.55); }
 
-  .m-form-eyebrow { font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem; }
-  .m-form-eyebrow::before { content:'';display:inline-block;width:12px;height:2px;background:var(--blue);border-radius:2px; }
-  .m-form-title { font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:800;color:var(--ink);letter-spacing:-0.02em;margin-bottom:0.3rem; }
-  .m-form-sub { font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6; }
+/* FONCTIONNEMENT */
+.steps-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border: 1px solid var(--gray-bd);
+}
+.step-col {
+  padding: 36px 28px;
+  border-right: 1px solid var(--gray-bd);
+  position: relative;
+  transition: background 0.2s;
+}
+.step-col:last-child { border-right: none; }
+.step-col:hover { background: var(--crf-red-lt); }
+.step-col:hover .step-num { color: var(--crf-red); }
+.step-num {
+  font-size: 3rem; font-weight: 900; letter-spacing: -0.05em;
+  color: var(--gray-bd); line-height: 1; margin-bottom: 16px;
+  transition: color 0.2s;
+}
+.step-title {
+  font-size: 0.88rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--black); margin-bottom: 10px;
+}
+.step-desc { font-size: 0.86rem; font-weight: 300; line-height: 1.7; color: var(--gray-tx); }
 
-  /* Profil selector */
-  .m-profil-label { font-size:0.78rem;font-weight:600;color:var(--ink2);margin-bottom:0.6rem; }
-  .m-profil-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1.5rem; }
-  .m-profil-btn { padding:0.6rem 0.4rem;border-radius:10px;border:1.5px solid var(--border);background:var(--bg2);text-align:center;cursor:none;transition:all 0.2s;font-size:0.72rem;font-weight:500;color:var(--muted); }
-  .m-profil-btn .m-profil-emoji { font-size:1.1rem;display:block;margin-bottom:0.2rem; }
-  .m-profil-btn:hover { border-color:var(--blue);background:var(--blue-light);color:var(--blue); }
-  .m-profil-btn.selected { border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark);font-weight:600; }
+/* Ligne rouge indicatrice en haut du 1er */
+.step-col:first-child::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 4px; background: var(--crf-red);
+}
 
-  /* Form fields */
-  .m-form-row { display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:0.8rem; }
-  .m-form-group { display:flex;flex-direction:column;gap:0.3rem;margin-bottom:0.8rem; }
-  .m-form-group.no-mb { margin-bottom:0; }
-  .m-label { font-size:0.75rem;font-weight:600;color:var(--ink2); }
-  .m-input, .m-select {
-    width:100%;padding:0.65rem 0.9rem;
-    border:1.5px solid var(--border);border-radius:10px;
-    font-family:'Space Grotesk',sans-serif;font-size:0.85rem;color:var(--ink);
-    background:var(--bg2);outline:none;cursor:none;transition:all 0.2s;
-  }
-  .m-input:focus, .m-select:focus { border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(66,133,244,0.1); }
-  .m-input::placeholder { color:var(--muted); }
-  .m-select { color:var(--muted); }
-  .m-select.filled { color:var(--ink); }
-  .m-icon-wrap { position:relative; }
-  .m-icon-wrap .m-input { padding-left:2.2rem; }
-  .m-field-icon { position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);font-size:0.85rem;pointer-events:none; }
+/* SERVICES */
+.services-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 2px; background: var(--gray-bd);
+}
+.svc-box {
+  background: white; padding: 36px 30px;
+  transition: background 0.2s;
+  cursor: default;
+  position: relative;
+}
+.svc-box:hover { background: var(--crf-red); }
+.svc-box:hover .svc-icon-bg { background: rgba(255,255,255,0.2); }
+.svc-box:hover .svc-title { color: white; }
+.svc-box:hover .svc-desc { color: rgba(255,255,255,0.7); }
+.svc-icon-bg {
+  width: 56px; height: 56px; background: var(--crf-red-lt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; margin-bottom: 18px;
+  transition: background 0.2s;
+}
+/* Croix rouge dans l'icône */
+.svc-icon-cross {
+  width: 56px; height: 56px; background: var(--crf-red);
+  position: relative; margin-bottom: 18px;
+}
+.svc-icon-cross::before,
+.svc-icon-cross::after {
+  content: ''; position: absolute; background: white; border-radius: 1px;
+}
+.svc-icon-cross::before { width: 12px; height: 56px; left: 22px; top: 0; }
+.svc-icon-cross::after  { width: 56px; height: 12px; left: 0; top: 22px; }
+.svc-title {
+  font-size: 0.88rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--black); margin-bottom: 10px;
+  transition: color 0.2s;
+}
+.svc-desc {
+  font-size: 0.86rem; font-weight: 300; line-height: 1.7;
+  color: var(--gray-tx); transition: color 0.2s;
+}
 
-  /* Password strength */
-  .m-pwd-strength { display:flex;gap:3px;margin-top:0.3rem; }
-  .m-pwd-bar { height:3px;border-radius:2px;flex:1;background:var(--border);transition:background 0.3s; }
+/* POUR QUI */
+.for-who-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.fw-panel { padding: 80px 60px; position: relative; overflow: hidden; }
+.fw-panel.patient { background: white; border: 1px solid var(--gray-bd); }
+.fw-panel.volunteer { background: var(--crf-red); }
 
-  /* Consent */
-  .m-consent-row { display:flex;gap:0.6rem;align-items:flex-start;margin-bottom:1rem; }
-  .m-consent-row input[type=checkbox] { width:16px;height:16px;flex-shrink:0;margin-top:1px;accent-color:var(--blue);cursor:none; }
-  .m-consent-text { font-size:0.75rem;color:var(--muted);line-height:1.5; }
-  .m-consent-text a { color:var(--blue);text-decoration:none; }
+/* Motif croix en fond */
+.fw-cross-pattern {
+  position: absolute; bottom: -50px; right: -50px;
+  width: 220px; height: 220px; opacity: 0.06;
+  pointer-events: none;
+}
+.fw-cross-pattern::before,
+.fw-cross-pattern::after {
+  content: ''; position: absolute; border-radius: 2px;
+}
+.fw-panel.patient .fw-cross-pattern::before,
+.fw-panel.patient .fw-cross-pattern::after { background: var(--crf-red); }
+.fw-panel.volunteer .fw-cross-pattern::before,
+.fw-panel.volunteer .fw-cross-pattern::after { background: white; }
+.fw-cross-pattern::before { width: 60px; height: 220px; left: 80px; top: 0; }
+.fw-cross-pattern::after  { width: 220px; height: 60px; left: 0; top: 80px; }
 
-  /* Buttons */
-  .m-submit-btn {
-    width:100%;padding:0.85rem;border-radius:28px;
-    background:var(--blue);color:#fff;border:none;
-    font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;
-    cursor:none;transition:all 0.3s;
-    box-shadow:0 4px 14px rgba(66,133,244,0.4);
-  }
-  .m-submit-btn:hover { background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 20px rgba(66,133,244,0.5); }
-  .m-btn-row { display:flex;gap:0.6rem;margin-top:0.5rem; }
-  .m-btn-back { flex:1;padding:0.85rem;border-radius:28px;background:var(--bg2);color:var(--ink2);border:1.5px solid var(--border);font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:none;transition:all 0.2s; }
-  .m-btn-back:hover { background:var(--bg3); }
-  .m-btn-next { flex:2; }
+.fw-label {
+  font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.12em; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.fw-panel.patient .fw-label { color: var(--crf-red); }
+.fw-panel.volunteer .fw-label { color: rgba(255,255,255,0.65); }
+.fw-label-cross {
+  width: 16px; height: 16px; position: relative;
+}
+.fw-label-cross::before,
+.fw-label-cross::after {
+  content: ''; position: absolute; border-radius: 1px;
+}
+.fw-panel.patient .fw-label-cross::before,
+.fw-panel.patient .fw-label-cross::after { background: var(--crf-red); }
+.fw-panel.volunteer .fw-label-cross::before,
+.fw-panel.volunteer .fw-label-cross::after { background: rgba(255,255,255,0.6); }
+.fw-label-cross::before { width: 5px; height: 16px; left: 5.5px; top: 0; }
+.fw-label-cross::after  { width: 16px; height: 5px; left: 0; top: 5.5px; }
 
-  /* Notif box */
-  .m-notif-box { background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.2rem; }
-  .m-notif-title { font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:0.6rem; }
+.fw-h {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1.9rem; font-weight: 900;
+  line-height: 1.15; letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+.fw-panel.patient .fw-h { color: var(--black); }
+.fw-panel.volunteer .fw-h { color: white; }
+.fw-p {
+  font-size: 0.92rem; font-weight: 300; line-height: 1.75;
+  margin-bottom: 28px;
+}
+.fw-panel.patient .fw-p { color: var(--gray-tx); }
+.fw-panel.volunteer .fw-p { color: rgba(255,255,255,0.7); }
+.fw-list { list-style: none; margin-bottom: 36px; display: flex; flex-direction: column; gap: 10px; }
+.fw-li {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.84rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.fw-panel.patient .fw-li { color: var(--black); }
+.fw-panel.volunteer .fw-li { color: rgba(255,255,255,0.88); }
+.fw-li-check {
+  width: 22px; height: 22px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900; font-style: normal;
+}
+.fw-panel.patient .fw-li-check { background: var(--crf-red); color: white; }
+.fw-panel.volunteer .fw-li-check { background: rgba(255,255,255,0.18); color: white; }
 
-  /* Security badge */
-  .m-security-note { background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:10px;padding:0.8rem 1rem;margin-bottom:1.2rem;display:flex;gap:0.6rem;align-items:flex-start; }
-  .m-security-note p { font-size:0.75rem;color:var(--blue-dark);line-height:1.5; }
+.btn-red {
+  background: var(--crf-red); color: white;
+  padding: 14px 28px; border: none; cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.85rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  display: inline-flex; align-items: center; gap: 10px;
+  transition: all 0.18s;
+}
+.btn-red:hover { background: var(--crf-red-dk); transform: translateX(3px); }
+.btn-outline-w {
+  background: transparent; color: white;
+  padding: 13px 28px; border: 2px solid rgba(255,255,255,0.45); cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.85rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  display: inline-flex; align-items: center; gap: 10px;
+  transition: all 0.18s;
+}
+.btn-outline-w:hover { border-color: white; background: rgba(255,255,255,0.08); transform: translateX(3px); }
 
-  /* Success screen */
-  .m-success { display:none;text-align:center;padding:1rem 0; }
-  .m-success.show { display:block; }
-  .m-success-icon { width:70px;height:70px;border-radius:50%;background:var(--green-light);margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem;animation:successPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
-  .m-success-title { font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:800;color:var(--ink);margin-bottom:0.6rem; }
-  .m-success-sub { font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem;max-width:320px;margin-left:auto;margin-right:auto; }
-  .m-success-badge { display:inline-flex;align-items:center;gap:0.5rem;background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--blue-dark);padding:0.4rem 1rem;border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:0.68rem;margin-bottom:1.2rem; }
-  .m-success-number { font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:800;color:var(--blue);margin:0.5rem 0 0.2rem; }
-  .m-success-number-label { font-size:0.75rem;color:var(--muted); }
-  .m-close-btn { display:inline-flex;align-items:center;gap:0.5rem;color:var(--blue);font-size:0.82rem;font-weight:600;text-decoration:none;margin-top:1.5rem;cursor:none;transition:gap 0.2s;background:none;border:none; }
-  .m-close-btn:hover { gap:0.8rem; }
+/* PARTENAIRE CRF */
+.partner-block {
+  display: grid; grid-template-columns: 280px 1fr;
+  background: var(--black);
+}
+.partner-red-col {
+  background: var(--crf-red);
+  padding: 60px 40px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+}
+.partner-crf-cross {
+  width: 90px; height: 90px; position: relative;
+}
+.partner-crf-cross::before,
+.partner-crf-cross::after {
+  content: ''; position: absolute; background: white; border-radius: 3px;
+}
+.partner-crf-cross::before { width: 22px; height: 90px; left: 34px; top: 0; }
+.partner-crf-cross::after  { width: 90px; height: 22px; left: 0; top: 34px; }
+.partner-name {
+  font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.1em; color: rgba(255,255,255,0.75); text-align: center;
+  line-height: 1.5;
+}
+.partner-content { padding: 60px; }
+.partner-tag {
+  font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--crf-red); margin-bottom: 12px;
+}
+.partner-h {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1.7rem; font-weight: 900;
+  color: white; margin-bottom: 16px; line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.partner-p { font-size: 0.9rem; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.45); max-width: 520px; }
 
-  @keyframes successPop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
-  @keyframes fadeInUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+/* TÉMOIGNAGES */
+.testi-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 2px; background: var(--gray-bd);
+}
+.testi-card { background: white; padding: 40px 34px; border-top: 4px solid transparent; transition: border-color 0.2s; }
+.testi-card:hover { border-top-color: var(--crf-red); }
+.testi-card.featured { background: var(--crf-red); border-top-color: var(--crf-red-dk); }
+.tc-quote {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 3.5rem; line-height: 0.7; color: var(--gray-bd);
+  margin-bottom: 20px;
+}
+.testi-card.featured .tc-quote { color: rgba(255,255,255,0.2); }
+.tc-text { font-size: 0.9rem; font-weight: 300; line-height: 1.8; font-style: italic; color: var(--gray-tx); margin-bottom: 28px; }
+.testi-card.featured .tc-text { color: rgba(255,255,255,0.72); }
+.tc-by { display: flex; align-items: center; gap: 12px; padding-top: 20px; border-top: 1px solid var(--gray-bd); }
+.testi-card.featured .tc-by { border-color: rgba(255,255,255,0.15); }
+.tc-av { width: 40px; height: 40px; background: var(--crf-red-lt); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.testi-card.featured .tc-av { background: rgba(255,255,255,0.15); }
+.tc-by strong { display: block; font-size: 0.86rem; font-weight: 800; color: var(--black); }
+.testi-card.featured .tc-by strong { color: white; }
+.tc-by span { font-size: 0.72rem; color: var(--gray-mid); text-transform: uppercase; letter-spacing: 0.05em; }
+.testi-card.featured .tc-by span { color: rgba(255,255,255,0.45); }
+
+/* CTA FINAL */
+.cta-section {
+  background: var(--crf-red);
+  padding: 100px 60px;
+  display: grid; grid-template-columns: 1fr 320px;
+  align-items: center; gap: 60px;
+  position: relative; overflow: hidden;
+}
+/* Croix déco CTA */
+.cta-section::after {
+  content: '';
+  position: absolute; right: 380px; top: 50%; transform: translateY(-50%);
+  width: 260px; height: 260px; pointer-events: none; opacity: 0.07;
+  background:
+    white calc(50% - 5px) 0 / 10px 100% no-repeat,  /* vertical arm */
+    white 0 calc(50% - 5px) / 100% 10px no-repeat;   /* horizontal arm */
+}
+.cta-left { position: relative; z-index: 1; }
+.cta-eyebrow { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.55); margin-bottom: 10px; }
+.cta-h2 {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 2.8rem; font-weight: 900; color: white;
+  line-height: 1.08; letter-spacing: -0.03em; margin-bottom: 8px;
+}
+.cta-h2-it {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400; font-size: 2.4rem;
+  color: rgba(255,255,255,0.65); display: block;
+}
+.cta-p { font-size: 1rem; font-weight: 300; color: rgba(255,255,255,0.65); max-width: 460px; line-height: 1.7; margin-top: 16px; }
+.cta-right { display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 1; }
+
+/* FOOTER */
+footer {
+  background: var(--black);
+  border-top: 4px solid var(--crf-red);
+  display: grid; grid-template-columns: 260px 1fr 1fr;
+}
+.ft-col { padding: 52px 40px; border-right: 1px solid rgba(255,255,255,0.06); }
+.ft-col:last-child { border-right: none; }
+.ft-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.ft-cross {
+  width: 32px; height: 32px; background: var(--crf-red);
+  position: relative; flex-shrink: 0;
+}
+.ft-cross::before, .ft-cross::after { content: ''; position: absolute; background: white; border-radius: 1px; }
+.ft-cross::before { width: 8px; height: 32px; left: 12px; top: 0; }
+.ft-cross::after  { width: 32px; height: 8px; left: 0; top: 12px; }
+.ft-name { font-size: 1.05rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.07em; color: white; }
+.ft-tagline { font-size: 0.8rem; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.35); font-style: italic; margin-bottom: 20px; }
+.ft-copy { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.03em; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); }
+.ft-links-h { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--crf-red); margin-bottom: 18px; }
+.ft-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.ft-links a { font-size: 0.83rem; font-weight: 300; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.15s; }
+.ft-links a:hover { color: white; }
+
+
+/* ══════════════════════════════════════════
+   PAGES FORMULAIRES — STYLE CRF
+══════════════════════════════════════════ */
+.form-page {
+  display: grid; grid-template-columns: 320px 1fr;
+  min-height: 100vh;
+  padding-top: 73px;
+}
+
+/* Sidebar */
+.fsb {
+  position: sticky; top: 73px;
+  height: calc(100vh - 73px);
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.fsb.p-fsb { background: var(--crf-red); }
+.fsb.v-fsb { background: var(--black); border-right: 4px solid var(--crf-red); }
+
+.fsb-inner { padding: 44px 32px; flex: 1; display: flex; flex-direction: column; }
+
+.fsb-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.12);
+  padding: 6px 12px;
+  font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.75); margin-bottom: 28px; width: fit-content;
+}
+.fsb-chip-cross {
+  width: 10px; height: 10px; position: relative; flex-shrink: 0;
+}
+.fsb-chip-cross::before, .fsb-chip-cross::after {
+  content: ''; position: absolute; background: white; border-radius: 1px;
+}
+.fsb-chip-cross::before { width: 3px; height: 10px; left: 3.5px; top: 0; }
+.fsb-chip-cross::after  { width: 10px; height: 3px; left: 0; top: 3.5px; }
+
+.fsb-title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1.65rem; font-weight: 900; color: white;
+  letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px;
+}
+.fsb-title-it {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400; font-size: 1.4rem;
+  color: rgba(255,255,255,0.65); display: block; margin-bottom: 18px;
+}
+.fsb-desc { font-size: 0.83rem; font-weight: 300; color: rgba(255,255,255,0.42); line-height: 1.7; margin-bottom: 36px; }
+
+/* Stepper */
+.fsb-steps { display: flex; flex-direction: column; gap: 0; flex: 1; }
+.fsb-step {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.fsb-num {
+  width: 26px; height: 26px; flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 800; color: rgba(255,255,255,0.25);
+  transition: all 0.25s;
+}
+.fsb-step.active .fsb-num {
+  background: white; border-color: white;
+  color: var(--crf-red);
+}
+.v-fsb .fsb-step.active .fsb-num { color: var(--black); }
+.fsb-step.done .fsb-num {
+  background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3);
+  color: white; font-size: 0.8rem;
+}
+.fsb-step-info strong {
+  display: block; font-size: 0.78rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.25);
+}
+.fsb-step.active .fsb-step-info strong { color: white; }
+.fsb-step.done .fsb-step-info strong { color: rgba(255,255,255,0.5); }
+.fsb-step-info span { font-size: 0.72rem; color: rgba(255,255,255,0.18); font-weight: 300; }
+.fsb-step.active .fsb-step-info span { color: rgba(255,255,255,0.42); }
+
+/* Footer sidebar */
+.fsb-foot {
+  padding: 20px 32px;
+  background: rgba(0,0,0,0.15);
+  display: flex; align-items: center; gap: 10px;
+}
+.fsb-foot-cross {
+  width: 22px; height: 22px; position: relative; flex-shrink: 0;
+}
+.fsb-foot-cross::before, .fsb-foot-cross::after {
+  content: ''; position: absolute; background: rgba(255,255,255,0.3); border-radius: 1px;
+}
+.fsb-foot-cross::before { width: 6px; height: 22px; left: 8px; top: 0; }
+.fsb-foot-cross::after  { width: 22px; height: 6px; left: 0; top: 8px; }
+.fsb-foot-text {
+  font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: rgba(255,255,255,0.25); line-height: 1.45;
+}
+
+/* Form area */
+.farea {
+  background: var(--gray-lt);
+  overflow-y: auto;
+}
+.farea-inner { padding: 52px 60px; max-width: 740px; }
+
+/* Progress */
+.fprog { height: 3px; background: var(--gray-bd); margin-bottom: 48px; }
+.fprog-fill { height: 100%; background: var(--crf-red); transition: width 0.5s ease; }
+
+/* Step panels */
+.step-panel { display: none; animation: fadeUp 0.3s ease; }
+.step-panel.active { display: block; }
+
+/* Panel header */
+.pn-head { margin-bottom: 40px; padding-left: 20px; border-left: 4px solid var(--crf-red); }
+.pn-step-label {
+  font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--crf-red); margin-bottom: 8px;
+}
+.pn-title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1.8rem; font-weight: 900; color: var(--black);
+  letter-spacing: -0.02em; line-height: 1.15;
+}
+.pn-desc { font-size: 0.88rem; font-weight: 300; color: var(--gray-tx); margin-top: 6px; line-height: 1.65; }
+
+/* Form elements */
+.fg { display: grid; gap: 18px; }
+.fg-2 { grid-template-columns: 1fr 1fr; }
+.fg-3 { grid-template-columns: 1fr 1fr 1fr; }
+.fgrp { display: flex; flex-direction: column; gap: 6px; }
+.fgrp.full { grid-column: 1/-1; }
+.flbl {
+  font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--black);
+}
+.flbl .req { color: var(--crf-red); margin-left: 2px; }
+.fhint { font-size: 0.72rem; font-weight: 300; color: var(--gray-mid); margin-top: -2px; }
+
+input[type=text], input[type=email], input[type=tel],
+input[type=date], select, textarea {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid var(--gray-bd);
+  background: white; border-radius: 0;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 400; color: var(--black);
+  outline: none; transition: border-color 0.15s;
+  -webkit-appearance: none; appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--crf-red);
+  box-shadow: 0 0 0 3px rgba(225,0,19,0.08);
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ABABAB' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  padding-right: 36px; cursor: pointer;
+}
+textarea { resize: vertical; min-height: 90px; }
+
+/* Options cliquables */
+.ropts, .chopts { display: flex; flex-wrap: wrap; gap: 8px; }
+.ropt, .copt {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px; border: 1.5px solid var(--gray-bd);
+  background: white; cursor: pointer; transition: all 0.15s;
+  font-size: 0.84rem; font-weight: 600; color: var(--black);
+}
+.ropt:hover, .copt:hover { border-color: var(--crf-red); background: var(--crf-red-lt); }
+.ropt.selected, .copt.selected { border-color: var(--crf-red); background: var(--crf-red-lt); color: var(--crf-red-dk); }
+.ropt input, .copt input { accent-color: var(--crf-red); width: 14px; height: 14px; flex-shrink: 0; }
+
+/* Services sélectionnables */
+.svc-sel { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.svc-sel-btn {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; padding: 18px 10px; border: 1.5px solid var(--gray-bd);
+  background: white; cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.svc-sel-btn:hover, .svc-sel-btn.selected { border-color: var(--crf-red); background: var(--crf-red-lt); }
+.svc-sel-btn.selected .svc-sel-nm { color: var(--crf-red); }
+.svc-sel-ic { font-size: 1.6rem; }
+.svc-sel-nm { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--black); }
+
+/* Urgence */
+.urg-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.urg-btn {
+  padding: 15px 10px; border: 1.5px solid var(--gray-bd);
+  background: white; cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.urg-btn:hover, .urg-btn.selected { border-color: var(--crf-red); background: var(--crf-red-lt); }
+.urg-btn .ul { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--black); margin-bottom: 3px; }
+.urg-btn.selected .ul { color: var(--crf-red); }
+.urg-btn .us { font-size: 0.72rem; color: var(--gray-mid); font-weight: 300; }
+
+/* Dispos */
+.dispo-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.dispo-btn {
+  padding: 11px 6px; border: 1.5px solid var(--gray-bd);
+  background: white; cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.dispo-btn:hover, .dispo-btn.selected { border-color: var(--crf-red); background: var(--crf-red-lt); }
+.dispo-btn .dd { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--black); display: block; }
+.dispo-btn.selected .dd { color: var(--crf-red); }
+.dispo-btn .dt { font-size: 0.65rem; color: var(--gray-mid); font-weight: 300; }
+
+/* Divider */
+.fdiv { border: none; border-top: 1px solid var(--gray-bd); margin: 24px 0; }
+.fdiv-lbl {
+  font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--gray-mid); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.fdiv-lbl::after { content: ''; flex: 1; height: 1px; background: var(--gray-bd); }
+
+/* Charte */
+.charte-box {
+  background: white; border: 1px solid var(--gray-bd);
+  border-left: 4px solid var(--crf-red); padding: 22px 24px; margin-bottom: 6px;
+}
+.charte-ttl {
+  font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--crf-red); margin-bottom: 10px;
+}
+.charte-txt { font-size: 0.84rem; line-height: 1.8; color: var(--gray-tx); font-weight: 300; }
+
+/* Consentement */
+.consent-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 13px 16px; background: var(--crf-red-lt); border: 1px solid var(--crf-red-mid);
+  cursor: pointer;
+}
+.consent-row input { width: 16px; height: 16px; accent-color: var(--crf-red); flex-shrink: 0; margin-top: 2px; }
+.consent-row span { font-size: 0.83rem; font-weight: 300; color: var(--gray-tx); line-height: 1.65; font-style: italic; }
+
+/* Actions */
+.faction {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--gray-bd);
+}
+.btn-next {
+  background: var(--crf-red); color: white;
+  padding: 13px 28px; border: none; cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.83rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.18s;
+}
+.btn-next:hover { background: var(--crf-red-dk); transform: translateX(3px); }
+.btn-prev {
+  background: transparent; color: var(--gray-mid);
+  padding: 11px 22px; border: 1.5px solid var(--gray-bd); cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  transition: all 0.15s;
+}
+.btn-prev:hover { border-color: var(--black); color: var(--black); }
+.btn-submit {
+  background: var(--crf-red); color: white;
+  padding: 13px 32px; border: none; cursor: pointer;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.85rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.18s;
+}
+.btn-submit:hover { background: var(--crf-red-dk); }
+
+/* SUCCESS */
+.success-scr { display: none; text-align: center; padding: 80px 40px; }
+.success-scr.active { display: block; animation: fadeUp 0.4s ease; }
+.succ-crf-cross {
+  width: 80px; height: 80px; background: var(--crf-red);
+  position: relative; margin: 0 auto 32px;
+}
+.succ-crf-cross::before, .succ-crf-cross::after {
+  content: ''; position: absolute; background: white; border-radius: 2px;
+}
+.succ-crf-cross::before { width: 18px; height: 80px; left: 31px; top: 0; }
+.succ-crf-cross::after  { width: 80px; height: 18px; left: 0; top: 31px; }
+.succ-h {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 2rem; font-weight: 900; color: var(--black); margin-bottom: 8px;
+}
+.succ-sub { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--crf-red); margin-bottom: 20px; }
+.succ-p { font-size: 0.92rem; font-weight: 300; color: var(--gray-tx); line-height: 1.75; max-width: 420px; margin: 0 auto 32px; }
+.succ-tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+.succ-tag { background: var(--crf-red-lt); border: 1px solid var(--crf-red-mid); color: var(--crf-red-dk); padding: 11px 18px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<!-- Bande rouge CRF en haut -->
+<div class="topbar"></div>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-dot"></div>
-    Terminal Akasha
-  </a>
-  <ul class="nav-links">
-    <li><a href="#presentation">Produit</a></li>
-    <li><a href="#origines">Origines</a></li>
-    <li><a href="#features">Fonctionnalités</a></li>
-    <li><a href="#business">Business</a></li>
-    <li><a href="#vision">Vision</a></li>
-  </ul>
-  <a href="#" onclick="openModal();return false;" class="nav-cta">Rejoindre</a>
+<!-- ══════════════════════ NAV ══════════════════════ -->
+<nav id="mainNav">
+  <div class="nav-logo-block" onclick="goTo('landing')">
+    <div class="nav-crf-cross"></div>
+    <div class="nav-logo-text">
+      <div class="nav-logo-main">P.HOSPI</div>
+      <span class="nav-logo-sub">Croix-Rouge Française</span>
+    </div>
+  </div>
+  <div class="nav-main">
+    <div class="nav-service-name">Entraide post-hospitalisation</div>
+    <ul class="nav-links" id="navLanding">
+      <li><button onclick="scrollAnchor('how')">Fonctionnement</button></li>
+      <li><button onclick="scrollAnchor('services')">Services</button></li>
+      <li><button onclick="scrollAnchor('for-who')">Pour qui</button></li>
+      <li><button onclick="scrollAnchor('testi')">Témoignages</button></li>
+      <li><button class="nav-cta" onclick="goTo('patient')">S'inscrire</button></li>
+    </ul>
+    <div class="nav-form-area" id="navForm">
+      <button class="nav-back-btn" onclick="goTo('landing')">← Accueil</button>
+      <div class="nav-breadcrumb">
+        <span>P.HOSPI</span>
+        <span class="nav-bc-sep">/</span>
+        <span class="nav-bc-current" id="navBC">Inscription</span>
+      </div>
+    </div>
+  </div>
 </nav>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-bg-blobs">
-    <div class="blob blob-blue"></div>
-    <div class="blob blob-green"></div>
-    <div class="blob blob-yellow"></div>
-    <div class="blob blob-red"></div>
-  </div>
 
-  <div class="hero-chip">
-    <div class="hero-chip-dot"></div>
-    Innovation technologique — 2025
-  </div>
+<!-- ══════════════════════════════════════════
+   PAGE LANDING
+══════════════════════════════════════════ -->
+<div class="page active" id="page-landing">
+  <div style="padding-top:73px">
 
-  <h1 class="hero-title">
-    <span class="word-blue">Term</span><span class="word-red">in</span><span class="word-yellow">al</span><br>
-    <span class="word-green">Aka</span><span class="word-blue">sha</span>
-  </h1>
-
-  <div class="g-strip">
-    <div style="background:var(--blue)"></div>
-    <div style="background:var(--red)"></div>
-    <div style="background:var(--yellow)"></div>
-    <div style="background:var(--green)"></div>
-  </div>
-
-  <p class="hero-slogan">La connaissance, instantanément.</p>
-  <p class="hero-desc">Une oreillette connectée à un réseau central d'information qui permet aux utilisateurs d'accéder instantanément à toutes les connaissances — inspirée de Genshin Impact, pensée pour notre monde.</p>
-  <div class="hero-actions">
-    <a href="#" onclick="openModal();return false;" class="btn-primary">Découvrir</a>
-    <a href="#features" class="btn-ghost">Fonctionnalités</a>
-  </div>
-
-  <div class="scroll-hint">
-    <div class="scroll-line"></div>
-    <div class="scroll-label">Défiler</div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- PRESENTATION -->
-<section id="presentation">
-  <div class="section-inner">
-    <div class="pres-grid">
-      <div class="pres-content">
-        <div class="section-tag">Introduction</div>
-        <h2 class="section-title">Une technologie <span class="accent-blue">fictive</span>,<br>une réalité <span class="accent-green">inspirante</span></h2>
-        <p class="pres-body">Le Terminal Akasha est une technologie fictive provenant du jeu Genshin Impact. Il s'agit d'une oreillette connectée à un réseau central d'information qui permet aux utilisateurs d'accéder instantanément à toutes les connaissances.</p>
-        <p class="pres-body">Dans l'histoire, cette technologie est utilisée dans la région de Sumeru, un pays dédié au savoir, dirigé par une Académie de chercheurs. Chaque citoyen possède un terminal qui lui permet d'accéder, partager, et améliorer sa productivité.</p>
-        <div class="pres-highlight">
-          <strong>⚠️ Mais attention :</strong> on découvre que ce système sert aussi à <strong>contrôler les habitants</strong> et centraliser leurs pensées — un dilemme éthique fondamental que nous explorons sur cette page.
-        </div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-red">
+      <div class="hero-deco-cross"></div>
+      <div class="hero-badge">
+        <div class="hero-badge-cross"></div>
+        Programme Croix-Rouge Française
       </div>
-      <div class="pres-visual">
-        <div class="orb-container">
-          <div class="orb-ring"></div>
-          <div class="orb-ring"></div>
-          <div class="orb-ring"></div>
-          <div class="orb"></div>
-          <div class="orb-inner">
-            <div class="orb-letter">Σ</div>
-            <div class="orb-sub">Akasha Net</div>
-          </div>
+      <h1 class="hero-h1">
+        Rentrer chez soi
+        <span class="hero-h1-sub">en toute sérénité.</span>
+      </h1>
+      <p class="hero-desc">Après une hospitalisation, reprendre sa vie quotidienne peut être difficile. P.HOSPI vous connecte avec des bénévoles formés Croix-Rouge pour des aides à domicile concrètes et humaines.</p>
+      <div class="hero-btns">
+        <button class="btn-hero-w" onclick="goTo('patient')">
+          <span>Je cherche de l'aide</span><span>→</span>
+        </button>
+        <button class="btn-hero-ghost" onclick="goTo('volunteer')">
+          <span>Devenir bénévole</span><span>→</span>
+        </button>
+      </div>
+      <div class="hero-kpis">
+        <div class="hero-kpi">
+          <div class="hk-n">3 200+</div>
+          <div class="hk-l">Personnes accompagnées</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hk-n">1 400</div>
+          <div class="hk-l">Bénévoles actifs</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hk-n">48h</div>
+          <div class="hk-l">Délai moyen</div>
         </div>
       </div>
     </div>
+
+    <div class="hero-white">
+      <div class="hw-label">Missions en cours</div>
+      <div class="mission-stack">
+        <div class="mis-card">
+          <div class="mis-avatar">👩</div>
+          <div class="mis-body">
+            <div class="mis-chip">Patiente · Suivi actif</div>
+            <div class="mis-name">Martine, 72 ans — Chirurgie du genou</div>
+            <div class="mis-tags"><span class="mis-tag">🛒 Courses</span><span class="mis-tag">🧹 Ménage</span><span class="mis-tag">🤝 Présence</span></div>
+            <div class="mis-status"><span class="mis-dot"></span>Accompagnée par Sophie · Mission en cours</div>
+          </div>
+        </div>
+        <div class="mis-card benev" style="background:var(--crf-red)">
+          <div class="mis-avatar">✚</div>
+          <div class="mis-body">
+            <div class="mis-chip">Bénévole CRF</div>
+            <div class="mis-name">Sophie M. — Disponible ce week-end</div>
+            <div class="mis-tags"><span class="mis-tag">⭐ 4.9/5</span><span class="mis-tag">38 missions</span><span class="mis-tag">Paris 15e</span></div>
+          </div>
+        </div>
+        <div class="mis-card">
+          <div class="mis-avatar">👨</div>
+          <div class="mis-body">
+            <div class="mis-chip">Patient · Suivi actif</div>
+            <div class="mis-name">Paul, 68 ans — Post-cardio</div>
+            <div class="mis-tags"><span class="mis-tag">🚗 Transport</span><span class="mis-tag">💊 Rappels</span></div>
+            <div class="mis-status"><span class="mis-dot"></span>Coordinateur assigné</div>
+          </div>
+        </div>
+      </div>
+      <div class="mis-notif">
+        <div class="mn-icon">✅</div>
+        <div class="mn-txt">
+          <strong>Mission validée — 14h32</strong>
+          <span>Sophie en route pour les courses de Martine · 2,1 km</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANDEAU CRF -->
+  <div class="crf-band">
+    <div class="crf-band-item"><div class="crf-band-cross"></div>Programme officiel CRF</div>
+    <div class="crf-band-item"><span>🏥</span>Partenaires hospitaliers</div>
+    <div class="crf-band-item"><span>🔒</span>Bénévoles vérifiés et formés</div>
+    <div class="crf-band-item"><span>📍</span>Couverture nationale</div>
+    <div class="crf-band-item"><span>⚡</span>Intervention sous 48h</div>
   </div>
-</section>
 
-<div class="divider"></div>
-
-<!-- ORIGINES -->
-<section id="origines">
-  <div class="section-inner">
-    <div class="origins-grid">
-      <div>
-        <div class="section-tag yellow">Origines</div>
-        <h2 class="section-title">Évolution du <span class="accent-yellow">savoir</span> humain</h2>
-        <p class="section-body" style="margin-bottom:2rem">Le Terminal Akasha s'inscrit dans une longue évolution des technologies de transmission du savoir. De la parole aux interfaces cerveau-machine, chaque époque a révolutionné notre accès à la connaissance.</p>
-        <div class="timeline-vertical">
-          <div class="tv-item">
-            <div class="tv-marker"><div class="tv-dot"></div><div class="tv-line"></div></div>
-            <div class="tv-content"><div class="tv-era">Préhistoire</div><div class="tv-title">La Parole</div><div class="tv-desc">Transmission orale du savoir, de génération en génération. Mémoire collective fragile et limitée géographiquement.</div></div>
-          </div>
-          <div class="tv-item">
-            <div class="tv-marker"><div class="tv-dot"></div><div class="tv-line"></div></div>
-            <div class="tv-content"><div class="tv-era">XV–XX siècles</div><div class="tv-title">Livres & Encyclopédies</div><div class="tv-desc">Gutenberg révolutionne la diffusion du savoir. Les encyclopédies tentent de recenser tout le savoir humain.</div></div>
-          </div>
-          <div class="tv-item">
-            <div class="tv-marker"><div class="tv-dot"></div><div class="tv-line"></div></div>
-            <div class="tv-content"><div class="tv-era">1990s–2000s</div><div class="tv-title">Internet & Cloud</div><div class="tv-desc">Accès mondial, instantané et décentralisé. Wikipedia, Google Search — le savoir à portée de clavier.</div></div>
-          </div>
-          <div class="tv-item">
-            <div class="tv-marker"><div class="tv-dot"></div><div class="tv-line"></div></div>
-            <div class="tv-content"><div class="tv-era">Aujourd'hui</div><div class="tv-title">Intelligence Artificielle</div><div class="tv-desc">ChatGPT, Gemini, Claude — l'IA comprend, synthétise et répond. Le savoir devient conversationnel.</div></div>
-          </div>
-          <div class="tv-item">
-            <div class="tv-marker"><div class="tv-dot"></div></div>
-            <div class="tv-content"><div class="tv-era">Demain — Fiction</div><div class="tv-title">Terminal Akasha</div><div class="tv-desc">Accès direct au savoir dans notre cerveau. Une évolution radicale qui abolit l'interface.</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="origins-tech">
-        <h3>Technologies <span style="color:var(--blue)">réelles</span> qui s'en approchent</h3>
-        <div class="tech-pill-grid">
-          <div class="tech-pill blue">
-            <span class="tech-pill-icon">🤖</span> ChatGPT / Gemini
-          </div>
-          <div class="tech-pill blue">
-            <span class="tech-pill-icon">🎙️</span> Assistants vocaux IA
-          </div>
-          <div class="tech-pill green">
-            <span class="tech-pill-icon">🎧</span> Oreillettes connectées
-          </div>
-          <div class="tech-pill green">
-            <span class="tech-pill-icon">📡</span> Réseaux 5G/6G
-          </div>
-          <div class="tech-pill red">
-            <span class="tech-pill-icon">🧠</span> Neuralink BCI
-          </div>
-          <div class="tech-pill red">
-            <span class="tech-pill-icon">⚡</span> Interfaces cerveau-machine
-          </div>
-        </div>
-        <div class="neuralink-card">
-          <div class="nl-tag">Technologie clé — Interface cerveau-machine</div>
-          <h4>Neuralink & au-delà</h4>
-          <p>Les interfaces cerveau-machine comme Neuralink représentent l'avant-garde technologique la plus proche du concept Akasha. Elles permettent déjà une communication directe entre le cerveau et des ordinateurs — posant les mêmes questions éthiques fondamentales.</p>
-        </div>
-        <div style="margin-top:2rem; padding:1.5rem; background:var(--bg3); border-radius:12px; border:1px solid var(--border);">
-          <p style="font-size:0.9rem; color:var(--ink2); line-height:1.7;"><strong>Le Terminal Akasha</strong> représente donc une évolution radicale : <strong>un accès direct au savoir dans notre cerveau</strong>, sans aucune interface physique — l'ultime convergence entre l'humain et la machine.</p>
-        </div>
-      </div>
+  <!-- FONCTIONNEMENT -->
+  <section class="lp-section" id="how">
+    <div class="sec-head">
+      <div class="sec-tag"><div class="sec-tag-line"></div>Fonctionnement</div>
+      <h2 class="sec-h2">Simple et rapide,<br><em>dès votre sortie de l'hôpital</em></h2>
+      <p class="sec-sub">Quatre étapes pour être accompagné(e), du formulaire d'inscription à la première intervention à domicile.</p>
     </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- HOW IT WORKS -->
-<section id="how">
-  <div class="section-inner">
-    <div class="section-tag">Fonctionnement</div>
-    <h2 class="section-title">Comment ça <span class="accent-blue">fonctionne</span> ?</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">
-          <div class="step-num-badge">1</div>
-          Activation
-        </div>
-        <div class="step-title">Fixation & Commande vocale</div>
-        <div class="step-desc">L'oreillette se fixe directement sur l'oreille. L'utilisateur l'active par une commande vocale personnalisée — simple, rapide, sans manipulation physique.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">
-          <div class="step-num-badge">2</div>
-          Requête
-        </div>
-        <div class="step-title">Recherche dans le réseau</div>
-        <div class="step-desc">Le terminal interroge les serveurs du réseau Akasha en temps réel. La requête vocale est traitée et les informations pertinentes sont sélectionnées instantanément.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">
-          <div class="step-num-badge">3</div>
-          Réponse
-        </div>
-        <div class="step-title">Transmission audio directe</div>
-        <div class="step-desc">L'information est transmise directement dans l'oreille de l'utilisateur. Plus pratique qu'un téléphone avec IA, la portabilité et la facilité d'usage sont au cœur du concept.</div>
-      </div>
+    <div class="steps-grid">
+      <div class="step-col"><div class="step-num">01</div><div class="step-title">Inscription</div><p class="step-desc">Formulaire en ligne en moins de 10 minutes, depuis l'hôpital ou chez vous. Un assistant social peut vous aider.</p></div>
+      <div class="step-col"><div class="step-num">02</div><div class="step-title">Évaluation</div><p class="step-desc">Un coordinateur P.HOSPI vous contacte sous 24h pour établir un plan d'accompagnement personnalisé.</p></div>
+      <div class="step-col"><div class="step-num">03</div><div class="step-title">Mise en relation</div><p class="step-desc">Nous identifions le ou les bénévoles formés les plus adaptés, dans votre secteur géographique.</p></div>
+      <div class="step-col"><div class="step-num">04</div><div class="step-title">Suivi continu</div><p class="step-desc">Chaque intervention est documentée. Votre plan évolue avec votre rétablissement.</p></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="divider"></div>
-
-<!-- FEATURES -->
-<section id="features">
-  <div class="section-inner">
-    <div class="feat-header">
-      <div>
-        <div class="section-tag red">Capacités</div>
-        <h2 class="section-title">Ce que le terminal<br><span class="accent-red">vous offre</span></h2>
-      </div>
-      <p class="section-body">Accès instantané, partage de pensées, assistance permanente : chaque fonctionnalité est conçue pour augmenter votre potentiel cognitif et votre productivité.</p>
+  <!-- SERVICES -->
+  <section class="lp-section bg-lt" id="services">
+    <div class="sec-head">
+      <div class="sec-tag"><div class="sec-tag-line"></div>Nos services</div>
+      <h2 class="sec-h2">Tout ce qu'il faut<br><em>pour rentrer sereinement</em></h2>
+      <p class="sec-sub">Des aides concrètes, humaines, adaptées à votre rythme de rétablissement.</p>
     </div>
-    <div class="feat-tabs">
-      <button class="feat-tab active" data-panel="core">Fonctions cœur</button>
-      <button class="feat-tab" data-panel="pro">Professionnel</button>
-      <button class="feat-tab" data-panel="edu">Éducation</button>
+    <div class="services-grid">
+      <div class="svc-box"><div class="svc-icon-bg">🛒</div><div class="svc-title">Courses & Ravitaillement</div><p class="svc-desc">Faire les courses selon votre liste, livrées directement chez vous avec attention.</p></div>
+      <div class="svc-box"><div class="svc-icon-bg">🤝</div><div class="svc-title">Présence & Compagnie</div><p class="svc-desc">Une présence amicale pour ne pas rester seul·e les premiers jours.</p></div>
+      <div class="svc-box"><div class="svc-icon-bg">🧹</div><div class="svc-title">Ménage léger</div><p class="svc-desc">Aide ménagère légère pour que votre domicile reste agréable pendant la convalescence.</p></div>
+      <div class="svc-box"><div class="svc-icon-bg">🚗</div><div class="svc-title">Transport & Accompagnement</div><p class="svc-desc">Accompagnement aux rendez-vous médicaux, kiné, pharmacie — avec ou sans véhicule.</p></div>
+      <div class="svc-box"><div class="svc-icon-bg">💊</div><div class="svc-title">Rappels & Suivi</div><p class="svc-desc">Rappels médicaments et rendez-vous, coordonnés avec votre équipe soignante.</p></div>
+      <div class="svc-box"><div class="svc-icon-bg">📞</div><div class="svc-title">Lien avec la famille</div><p class="svc-desc">Tenir vos proches informés de votre rétablissement, avec votre accord.</p></div>
     </div>
-    <div class="feat-panels">
+  </section>
 
-      <div class="feat-panel active" id="panel-core">
-        <div class="feat-card">
-          <div class="feat-icon blue">🔍</div>
-          <div class="feat-name">Accès instantané</div>
-          <div class="feat-desc">Interrogez le réseau mondial de connaissances d'une simple commande vocale. Réponse en moins d'une seconde.</div>
-          <div class="feat-detail">Le réseau Akasha couvre plus de 99% des connaissances humaines vérifiées, en 120 langues, mis à jour en temps réel.</div>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon green">💬</div>
-          <div class="feat-name">Partage de pensées</div>
-          <div class="feat-desc">Transmettez idées et émotions à d'autres utilisateurs Akasha. Une couche de communication cognitive sans précédent.</div>
-          <div class="feat-detail">Le partage est toujours volontaire et chiffré de bout en bout. Vous contrôlez ce que vous partagez et avec qui.</div>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon red">⚡</div>
-          <div class="feat-name">Assistance permanente</div>
-          <div class="feat-desc">Un assistant cognitif disponible 24h/24, qui comprend votre contexte et anticipe vos besoins informationnels.</div>
-          <div class="feat-detail">L'IA contextuelle apprend vos habitudes de recherche pour des suggestions proactives et personnalisées.</div>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon yellow">📊</div>
-          <div class="feat-name">Boost de productivité</div>
-          <div class="feat-desc">Réduisez le temps de recherche de 90%. Prenez des décisions éclairées grâce à des données en temps réel.</div>
-          <div class="feat-detail">Les utilisateurs rapportent un gain moyen de 3h par jour sur leurs tâches de recherche et de synthèse d'information.</div>
-        </div>
-      </div>
-
-      <div class="feat-panel" id="panel-pro">
-        <div class="feat-card">
-          <div class="feat-icon blue">🏥</div>
-          <div class="feat-name">Médical</div>
-          <div class="feat-desc">Accès instantané aux dernières publications médicales, protocoles de soins et données patient contextualisées.</div>
-          <div class="feat-detail">Intégration avec les bases de données PubMed, WHO et dossiers médicaux partagés. RGPD conforme.</div>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon red">⚖️</div>
-          <div class="feat-name">Juridique</div>
-          <div class="feat-desc">Jurisprudences, lois, codes — accessibles instantanément lors d'une plaidoirie ou d'une consultation.</div>
-          <div class="feat-detail">Mise à jour en temps réel des nouvelles décisions de justice et évolutions législatives.</div>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon green">🔬</div>
-          <div class="feat-name">Ingénierie & R&D</div>
-          <div class="feat-desc">Spécifications techniques, brevets, normes ISO — votre bibliothèque d'ingénieur dans l'oreille.</div>
-          <div class="feat-detail">Accès à plus de 50 millions de brevets internationaux et standards industriels.</div>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon yellow">💼</div>
-          <div class="feat-name">Finance & Analyse</div>
-          <div class="feat-desc">Données de marché en temps réel, analyses sectorielles et rapports financiers synthétisés vocalement.</div>
-          <div class="feat-detail">Connexion aux flux Bloomberg, Reuters et bases de données macroéconomiques mondiales.</div>
-        </div>
-      </div>
-
-      <div class="feat-panel" id="panel-edu">
-        <div class="feat-card">
-          <div class="feat-icon blue">🎓</div>
-          <div class="feat-name">Apprentissage adaptatif</div>
-          <div class="feat-desc">Le terminal s'adapte à votre niveau et style d'apprentissage pour délivrer des explications personnalisées.</div>
-          <div class="feat-detail">Algorithmes pédagogiques développés avec le Ministère de l'Éducation nationale. Couverture de tous niveaux.</div>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon green">🌍</div>
-          <div class="feat-name">Langues & Traduction</div>
-          <div class="feat-desc">Traduction instantanée dans 120 langues. Apprenez une langue par immersion cognitive totale.</div>
-          <div class="feat-detail">Intégration de méthodes issues des neurosciences pour un apprentissage linguistique 3x plus rapide.</div>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon red">📝</div>
-          <div class="feat-name">Aide aux devoirs</div>
-          <div class="feat-desc">Explications pas à pas, exemples concrets et exercices adaptés pour chaque matière et chaque élève.</div>
-          <div class="feat-detail">Conformité aux programmes officiels de l'Éducation nationale. Contrôle parental intégré.</div>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon yellow">🔗</div>
-          <div class="feat-name">Réseau académique</div>
-          <div class="feat-desc">Connectez-vous avec des étudiants et chercheurs du monde entier. Collaborez en temps réel.</div>
-          <div class="feat-detail">Partenariat avec 800 institutions académiques sur 40 pays pour un réseau de savoir vivant.</div>
-        </div>
-      </div>
-
+  <!-- POUR QUI -->
+  <div class="for-who-grid" id="for-who">
+    <div class="fw-panel patient">
+      <div class="fw-cross-pattern"></div>
+      <div class="fw-label"><div class="fw-label-cross"></div>Pour les patients</div>
+      <h3 class="fw-h">Retrouvez votre autonomie à votre rythme</h3>
+      <p class="fw-p">Que vous sortiez d'une opération, d'une longue hospitalisation ou d'une convalescence difficile, P.HOSPI adapte l'aide à vos besoins réels.</p>
+      <ul class="fw-list">
+        <li class="fw-li"><span class="fw-li-check">✓</span>Inscription gratuite et sans engagement</li>
+        <li class="fw-li"><span class="fw-li-check">✓</span>Bénévoles vérifiés et formés Croix-Rouge</li>
+        <li class="fw-li"><span class="fw-li-check">✓</span>Planning flexible selon vos disponibilités</li>
+        <li class="fw-li"><span class="fw-li-check">✓</span>Suivi via la plateforme ou par téléphone</li>
+      </ul>
+      <button class="btn-red" onclick="goTo('patient')">Demander de l'aide →</button>
+    </div>
+    <div class="fw-panel volunteer">
+      <div class="fw-cross-pattern"></div>
+      <div class="fw-label"><div class="fw-label-cross"></div>Pour les bénévoles</div>
+      <h3 class="fw-h">Donnez de votre temps, changez une vie</h3>
+      <p class="fw-p">Rejoignez le réseau P.HOSPI, soutenu par la Croix-Rouge Française. Choisissez librement vos missions, vos horaires, votre secteur.</p>
+      <ul class="fw-list">
+        <li class="fw-li"><span class="fw-li-check">✓</span>Formation Croix-Rouge complète offerte</li>
+        <li class="fw-li"><span class="fw-li-check">✓</span>Missions choisies librement</li>
+        <li class="fw-li"><span class="fw-li-check">✓</span>Coordinateur dédié disponible</li>
+        <li class="fw-li"><span class="fw-li-check">✓</span>Communauté solidaire nationale</li>
+      </ul>
+      <button class="btn-outline-w" onclick="goTo('volunteer')">Devenir bénévole →</button>
     </div>
   </div>
-</section>
 
-<div class="divider"></div>
-
-<!-- TECH -->
-<section id="tech">
-  <div class="section-inner">
-    <div class="tech-layout">
-      <div>
-        <div class="section-tag green">Architecture</div>
-        <h2 class="section-title">La technologie<br><span class="accent-green">derrière Akasha</span></h2>
-        <p class="section-body">Un système multi-couche alliant hardware miniaturisé, IA de pointe et infrastructure cloud distribuée pour garantir performance et fiabilité.</p>
-        <div class="tech-stack">
-          <div class="tech-item" style="--w:95%" data-detail="Puce Akasha-X1 : 2nm gravure TSMC, 12 cœurs IA dédiés, 3 grammes, autonomie 48h. Transmission audio HD 360° sans latence perceptible.">
-            <div class="tech-item-header">
-              <div class="tech-left"><div class="tech-dot"></div><div class="tech-name">Hardware & Capteurs</div></div>
-              <div style="display:flex;gap:1rem;align-items:center"><div class="tech-pct">95%</div><div class="tech-arrow">›</div></div>
-            </div>
-            <div class="tech-bar-wrap"><div class="tech-bar"></div></div>
-            <div class="tech-detail"></div>
-          </div>
-          <div class="tech-item" style="--w:88%" data-detail="Modèle de langage multimodal entraîné sur l'ensemble des connaissances vérifiées. Compréhension contextuelle, inférence causale, raisonnement multi-étapes en 0.3 secondes.">
-            <div class="tech-item-header">
-              <div class="tech-left"><div class="tech-dot"></div><div class="tech-name">IA & Traitement du langage</div></div>
-              <div style="display:flex;gap:1rem;align-items:center"><div class="tech-pct">88%</div><div class="tech-arrow">›</div></div>
-            </div>
-            <div class="tech-bar-wrap"><div class="tech-bar"></div></div>
-            <div class="tech-detail"></div>
-          </div>
-          <div class="tech-item" style="--w:92%" data-detail="Infrastructure distribuée sur 1 200 nœuds mondiaux. Redondance triple, latence &lt;10ms, disponibilité 99.99%. Données répliquées en temps réel.">
-            <div class="tech-item-header">
-              <div class="tech-left"><div class="tech-dot"></div><div class="tech-name">Réseau distribué & Cloud</div></div>
-              <div style="display:flex;gap:1rem;align-items:center"><div class="tech-pct">92%</div><div class="tech-arrow">›</div></div>
-            </div>
-            <div class="tech-bar-wrap"><div class="tech-bar"></div></div>
-            <div class="tech-detail"></div>
-          </div>
-          <div class="tech-item" style="--w:97%" data-detail="Chiffrement AES-256 de bout en bout, protocole TLS 1.3, anonymisation différentielle. Conformité RGPD, SOC2 Type II et ISO 27001.">
-            <div class="tech-item-header">
-              <div class="tech-left"><div class="tech-dot"></div><div class="tech-name">Sécurité & Chiffrement</div></div>
-              <div style="display:flex;gap:1rem;align-items:center"><div class="tech-pct">97%</div><div class="tech-arrow">›</div></div>
-            </div>
-            <div class="tech-bar-wrap"><div class="tech-bar"></div></div>
-            <div class="tech-detail"></div>
-          </div>
-          <div class="tech-item" style="--w:85%" data-detail="APIs ouvertes pour développeurs tiers. SDK multiplateforme. Intégration avec écosystèmes Google, Microsoft, Apple. 10 000+ applications compatibles.">
-            <div class="tech-item-header">
-              <div class="tech-left"><div class="tech-dot"></div><div class="tech-name">APIs & Intégrations tierces</div></div>
-              <div style="display:flex;gap:1rem;align-items:center"><div class="tech-pct">85%</div><div class="tech-arrow">›</div></div>
-            </div>
-            <div class="tech-bar-wrap"><div class="tech-bar"></div></div>
-            <div class="tech-detail"></div>
-          </div>
-        </div>
-      </div>
-      <div class="tech-diagram">
-        <div class="tech-layer">
-          <div class="tech-layer-label" style="color:var(--blue)">Couche 1 — Utilisateur</div>
-          <div class="tech-layer-title">Oreillette & Interface vocale</div>
-          <div class="tech-layer-desc">Hardware ultra-léger, commandes vocales NLP temps réel</div>
-        </div>
-        <div class="tech-layer">
-          <div class="tech-layer-label" style="color:var(--red)">Couche 2 — Traitement</div>
-          <div class="tech-layer-title">IA embarquée & Edge computing</div>
-          <div class="tech-layer-desc">Pré-traitement local, compression, priorisation requêtes</div>
-        </div>
-        <div class="tech-layer">
-          <div class="tech-layer-label" style="color:var(--yellow)">Couche 3 — Réseau</div>
-          <div class="tech-layer-title">Infrastructure Akasha Network</div>
-          <div class="tech-layer-desc">1 200 nœuds, 5G/6G, latence &lt;10ms mondiale</div>
-        </div>
-        <div class="tech-layer">
-          <div class="tech-layer-label" style="color:var(--green)">Couche 4 — Données</div>
-          <div class="tech-layer-title">Base de connaissances mondiale</div>
-          <div class="tech-layer-desc">99% du savoir humain vérifié, 120 langues, mise à jour continue</div>
-        </div>
-        <div class="tech-layer">
-          <div class="tech-layer-label" style="color:var(--blue)">Couche 5 — Sécurité</div>
-          <div class="tech-layer-title">Protocoles de chiffrement</div>
-          <div class="tech-layer-desc">AES-256, RGPD, anonymisation différentielle</div>
-        </div>
-      </div>
+  <!-- PARTENAIRE -->
+  <div class="partner-block">
+    <div class="partner-red-col">
+      <div class="partner-crf-cross"></div>
+      <div class="partner-name">Croix-Rouge<br>Française</div>
+    </div>
+    <div class="partner-content">
+      <div class="partner-tag">Partenaire institutionnel officiel</div>
+      <h3 class="partner-h">Un programme porté<br>par la Croix-Rouge Française</h3>
+      <p class="partner-p">P.HOSPI est développé en partenariat avec la Croix-Rouge Française. Ce soutien garantit la rigueur de la formation des bénévoles, la coordination avec les équipes hospitalières, et le déploiement national progressif du service.</p>
     </div>
   </div>
-</section>
 
-<div class="divider"></div>
-
-<!-- BUSINESS MODEL -->
-<section id="business">
-  <div class="section-inner">
-    <div class="business-layout">
-      <div>
-        <div class="section-tag blue">Business Model</div>
-        <h2 class="section-title">Un modèle<br><span class="accent-blue">stratégique</span></h2>
-        <p class="section-body" style="margin-bottom:1.5rem">Pour diffuser cette technologie dans notre monde, nous avons imaginé une grande entreprise technologique en partenariat avec le ministère de l'éducation.</p>
-        <div class="partner-card">
-          <div class="partner-title">Alliance stratégique</div>
-          <div class="partner-sub">L'union des deux leaders de leur domaine pour démocratiser l'accès au savoir dans les institutions éducatives mondiales.</div>
-          <div class="partner-logos">
-            <div class="partner-badge google">🔵 Google Technology</div>
-            <div class="partner-badge edu">🎓 Ministère de l'Éducation</div>
-          </div>
-        </div>
-        <div style="margin-top:2rem; padding:1.5rem; border:1px solid var(--border); border-radius:12px; background:var(--bg);">
-          <div style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; color:var(--muted); letter-spacing:0.1em; margin-bottom:0.8rem;">SLOGAN</div>
-          <div style="font-family:'Outfit',sans-serif; font-size:1.3rem; font-weight:700; color:var(--blue);">« Accéder instantanément à tout le savoir du monde. »</div>
-        </div>
-      </div>
-      <div>
-        <h3 style="font-family:'Outfit',sans-serif; font-size:1.5rem; font-weight:700; color:var(--ink); margin-bottom:0.5rem;">Sources de revenus</h3>
-        <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">Un modèle hybride B2B et B2G pour une diffusion massive et pérenne.</p>
-        <div class="biz-model-cards">
-          <div class="biz-card">
-            <div class="biz-icon">🏫</div>
-            <div>
-              <div class="biz-label">Abonnements institutionnels</div>
-              <div class="biz-detail">Universités, grandes écoles et lycées s'abonnent par nombre d'utilisateurs. Tarification dégressive selon l'échelle.</div>
-            </div>
-          </div>
-          <div class="biz-card">
-            <div class="biz-icon">📊</div>
-            <div>
-              <div class="biz-label">Données d'apprentissage</div>
-              <div class="biz-detail">Monétisation anonymisée des patterns d'utilisation pour améliorer les programmes pédagogiques et l'IA.</div>
-            </div>
-          </div>
-          <div class="biz-card">
-            <div class="biz-icon">🌐</div>
-            <div>
-              <div class="biz-label">Réseau centralisé de connaissances</div>
-              <div class="biz-detail">Développement d'un écosystème ouvert permettant aux chercheurs de contribuer et valoriser leurs connaissances.</div>
-            </div>
-          </div>
-          <div class="biz-card">
-            <div class="biz-icon">💼</div>
-            <div>
-              <div class="biz-label">Akasha Pro — B2B</div>
-              <div class="biz-detail">Version premium pour entreprises : médecins, avocats, ingénieurs. Accès à des bases de données spécialisées.</div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- TÉMOIGNAGES -->
+  <section class="lp-section" id="testi">
+    <div class="sec-head">
+      <div class="sec-tag"><div class="sec-tag-line"></div>Témoignages</div>
+      <h2 class="sec-h2">Ce qu'ils en disent</h2>
     </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- BENEFITS -->
-<section id="benefits">
-  <div class="section-inner">
-    <div class="benefits-layout">
-      <div>
-        <div class="section-tag green">Avantages</div>
-        <h2 class="section-title">Opportunités &<br><span class="accent-green">bénéfices</span></h2>
-        <p class="section-body" style="margin-bottom:1rem">Pour les individus comme pour la société, le Terminal Akasha pourrait transformer en profondeur notre rapport au savoir et à la prise de décision.</p>
-        <ul class="benefits-list">
-          <li>
-            <div class="benefit-mark blue">✓</div>
-            <div class="benefit-text"><strong>Gain de temps énorme</strong> — Ce que vous cherchiez en heures, obtenu en secondes. Un avantage compétitif majeur pour chaque utilisateur.</div>
-          </li>
-          <li>
-            <div class="benefit-mark green">✓</div>
-            <div class="benefit-text"><strong>Accès rapide aux connaissances</strong> — Démocratisation du savoir : chaque citoyen dispose du même accès aux ressources qu'un expert.</div>
-          </li>
-          <li>
-            <div class="benefit-mark red">✓</div>
-            <div class="benefit-text"><strong>Réduction des erreurs humaines</strong> — Des décisions basées sur des données vérifiées, en temps réel. Moins d'erreurs médicales, juridiques, managériales.</div>
-          </li>
-          <li>
-            <div class="benefit-mark blue">✓</div>
-            <div class="benefit-text"><strong>Meilleure coordination collective</strong> — Un réseau partagé de connaissances favorise la cohésion des équipes et l'alignement des décisions.</div>
-          </li>
-          <li>
-            <div class="benefit-mark green">✓</div>
-            <div class="benefit-text"><strong>Diffusion du savoir pour tous</strong> — Une réduction des inégalités d'accès à l'éducation et à l'information à l'échelle mondiale.</div>
-          </li>
-          <li>
-            <div class="benefit-mark yellow">✓</div>
-            <div class="benefit-text"><strong>Productivité augmentée</strong> — Individuelle et collective, permettant une accélération de l'innovation scientifique et économique.</div>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h3 style="font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:700; color:var(--ink); margin-bottom:1.5rem;">Cas d'usage clés</h3>
-        <div class="cases-grid">
-          <div class="case-card">
-            <div class="case-tag">Étudiants</div>
-            <div class="case-title">Campus augmentés</div>
-            <div class="case-desc">Chaque étudiant dispose d'un tutor IA personnel, d'accès instantané aux bibliothèques et de support multilingue.</div>
-          </div>
-          <div class="case-card">
-            <div class="case-tag">Chercheurs</div>
-            <div class="case-title">R&D accélérée</div>
-            <div class="case-desc">Synthesis automatique de littérature scientifique, détection de lacunes dans la recherche, collaboration mondiale en temps réel.</div>
-          </div>
-          <div class="case-card">
-            <div class="case-tag">Entreprises</div>
-            <div class="case-title">Décisions data-driven</div>
-            <div class="case-desc">Réunions informées par des données en temps réel, briefings automatiques, analyse concurrentielle instantanée.</div>
-          </div>
-          <div class="case-card">
-            <div class="case-tag">Institutions éducatives</div>
-            <div class="case-title">Enseignement 3.0</div>
-            <div class="case-desc">Programmes personnalisés, suivi individualisé des apprentissages, contenu pédagogique adaptatif et multilingue.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- DILEMME -->
-<section id="dilemme" style="background:var(--ink); color:#fff;">
-  <div class="section-inner">
-    <div class="dilemme-inner">
-      <div class="dilemme-eyebrow">Éthique & Responsabilité</div>
-      <h2 class="dilemme-title">L'Innovation comme<br>double tranchant</h2>
-      <p class="dilemme-question">« Jusqu'où devons-nous laisser la technologie intervenir dans notre cerveau et nos décisions ? »</p>
-      <div class="dilemme-cards">
-        <div class="d-card pros">
-          <div class="d-card-title">✓ Opportunités</div>
-          <ul class="d-list">
-            <li>Société plus efficace et mieux informée</li>
-            <li>Réduction des inégalités d'accès au savoir</li>
-            <li>Accélération de la recherche scientifique</li>
-            <li>Assistance permanente pour décisions critiques</li>
-            <li>Démocratisation de l'expertise</li>
-          </ul>
-        </div>
-        <div class="d-card cons">
-          <div class="d-card-title">✗ Risques</div>
-          <ul class="d-list">
-            <li>Potentiel outil de surveillance de masse</li>
-            <li>Centralisation dangereuse des pensées</li>
-            <li>Dépendance cognitive et perte d'autonomie</li>
-            <li>Risques pour la liberté de penser</li>
-            <li>Failles de sécurité aux conséquences extrêmes</li>
-          </ul>
-        </div>
-      </div>
-      <div style="margin-top:3rem; padding:2rem; background:rgba(255,255,255,0.06); border-radius:16px; border:1px solid rgba(255,255,255,0.12);">
-        <p style="font-size:1rem; line-height:1.8; color:rgba(255,255,255,0.8);">Le Terminal Akasha illustre bien un <strong style="color:#fff">dilemme actuel fondamental</strong> : les innovations peuvent améliorer notre société, mais elles doivent être <strong style="color:var(--yellow)">encadrées par des règles éthiques solides</strong> pour protéger notre liberté et notre pensée individuelle.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- VISION -->
-<section id="vision">
-  <div class="section-inner">
-    <div class="vision-layout">
-      <div>
-        <div class="section-tag blue">Vision</div>
-        <h2 class="section-title">Nos <span class="accent-blue">piliers</span></h2>
-        <div class="vision-pillars">
-          <div class="vision-pillar">
-            <div class="pillar-num">01 — ACCESSIBILITÉ</div>
-            <div class="pillar-title">Savoir pour tous</div>
-            <div class="pillar-desc">Rendre la connaissance accessible indépendamment de la condition sociale, géographique ou économique.</div>
-          </div>
-          <div class="vision-pillar">
-            <div class="pillar-num">02 — LIBERTÉ</div>
-            <div class="pillar-title">Pensée indépendante</div>
-            <div class="pillar-desc">Augmenter les capacités humaines sans jamais compromettre la liberté de pensée et l'autonomie individuelle.</div>
-          </div>
-          <div class="vision-pillar">
-            <div class="pillar-num">03 — ÉTHIQUE</div>
-            <div class="pillar-title">IA responsable</div>
-            <div class="pillar-desc">Un conseil éthique indépendant supervise chaque évolution du système pour garantir son usage bénéfique.</div>
-          </div>
-          <div class="vision-pillar">
-            <div class="pillar-num">04 — TRANSPARENCE</div>
-            <div class="pillar-title">Données ouvertes</div>
-            <div class="pillar-desc">Publication annuelle des rapports d'audit, des algorithmes et des décisions prises par le conseil de gouvernance.</div>
-          </div>
-        </div>
-      </div>
-      <div class="vision-right">
-        <div class="vision-quote-block">
-          <div class="vision-quote">« Le vrai progrès n'est pas de donner accès à toute la connaissance — c'est de préserver la liberté de ne pas la consulter. »</div>
-          <div class="vision-author">— Mission Terminal Akasha</div>
-        </div>
-        <div class="vision-timeline">
-          <div class="timeline-title">Feuille de route</div>
-          <div class="timeline-items">
-            <div class="timeline-item">
-              <div class="timeline-year">2025</div>
-              <div class="timeline-text"><strong>Lancement Akasha One</strong>Première oreillette grand public. 28 langues, réseau de 1 200 nœuds, partenariats avec 800 institutions académiques.</div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-year">2026</div>
-              <div class="timeline-text"><strong>Akasha Pro & API ouverte</strong>Version professionnelle dédiée aux secteurs médical, juridique et ingénierie. Ouverture de l'API aux développeurs tiers.</div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-year">2027</div>
-              <div class="timeline-text"><strong>Akasha Education</strong>Programme mondial de déploiement dans 40 pays en développement avec tarification adaptée et contenu pédagogique localisé.</div>
-            </div>
-            <div class="timeline-item">
-              <div class="timeline-year">2030</div>
-              <div class="timeline-text"><strong>Vision 100 millions</strong>100 millions d'utilisateurs actifs. Base de données couvrant 99% des connaissances humaines vérifiées, en 120 langues.</div>
-            </div>
-          </div>
-        </div>
-        <div class="vision-cta-strip">
-          <div class="vcta-text">Partagez notre <em>vision</em> du futur.</div>
-          <a href="#" onclick="openModal();return false;" class="btn-white">Rejoindre</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- SECURITY -->
-<section id="security">
-  <div class="section-inner">
-    <div class="security-inner">
-      <div>
-        <div class="section-tag green">Sécurité</div>
-        <h2 class="section-title">Vos données,<br><span class="accent-green">votre contrôle</span></h2>
-        <p class="section-body" style="margin-top:1.2rem">La sécurité est au cœur de Terminal Akasha. Toutes les informations sont protégées par des protocoles de chiffrement avancés et vous gardez un contrôle total à tout moment.</p>
-        <div class="security-badges">
-          <div class="badge">
-            <div class="badge-icon-row"><div class="badge-dot"></div><div class="badge-icon">CHIFFREMENT</div></div>
-            <p class="badge-text">AES-256 + TLS 1.3 pour toutes vos communications de bout en bout</p>
-          </div>
-          <div class="badge">
-            <div class="badge-icon-row"><div class="badge-dot"></div><div class="badge-icon">ANONYMAT</div></div>
-            <p class="badge-text">Vos requêtes sont anonymisées et ne sont jamais revendues à des tiers</p>
-          </div>
-          <div class="badge">
-            <div class="badge-icon-row"><div class="badge-dot"></div><div class="badge-icon">CONTRÔLE</div></div>
-            <p class="badge-text">Gérez vos préférences de confidentialité avec une granularité totale</p>
-          </div>
-          <div class="badge">
-            <div class="badge-icon-row"><div class="badge-dot"></div><div class="badge-icon">CONFORMITÉ</div></div>
-            <p class="badge-text">RGPD, SOC2 Type II et ISO 27001. Conformité internationale complète.</p>
-          </div>
-        </div>
-      </div>
-      <div class="security-visual">
-        <svg width="260" height="260" viewBox="0 0 260 260" fill="none">
-          <!-- Outer rings -->
-          <circle cx="130" cy="130" r="120" stroke="#dadce0" stroke-width="1"/>
-          <circle cx="130" cy="130" r="90" stroke="#dadce0" stroke-width="1" stroke-dasharray="4 4"/>
-          <circle cx="130" cy="130" r="60" stroke="#4285F4" stroke-width="1.5" opacity="0.3"/>
-          <!-- Shield shape -->
-          <path d="M130 40 L190 70 L190 150 C190 185 130 220 130 220 C130 220 70 185 70 150 L70 70 Z" fill="rgba(66,133,244,0.05)" stroke="var(--blue)" stroke-width="2"/>
-          <!-- Inner shield sections colored -->
-          <path d="M130 60 L175 83 L175 148 C175 174 130 202 130 202 C130 202 85 174 85 148 L85 83 Z" fill="none" stroke="rgba(66,133,244,0.2)" stroke-width="1"/>
-          <!-- G-letter dots at cardinal points -->
-          <circle cx="130" cy="20" r="6" fill="var(--blue)"/>
-          <circle cx="240" cy="130" r="6" fill="var(--red)"/>
-          <circle cx="130" cy="240" r="6" fill="var(--yellow)"/>
-          <circle cx="20" cy="130" r="6" fill="var(--green)"/>
-          <!-- Check mark in center -->
-          <circle cx="130" cy="130" r="28" fill="rgba(66,133,244,0.1)" stroke="var(--blue)" stroke-width="2"/>
-          <path d="M118 130 L127 140 L144 118" stroke="var(--blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        </svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="section-inner">
-    <div class="section-tag red">Témoignages</div>
-    <h2 class="section-title">Ils ont <span class="accent-red">testé</span> Akasha</h2>
     <div class="testi-grid">
       <div class="testi-card">
-        <div class="testi-stars">
-          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
-        </div>
-        <p class="testi-text">Ce que je mettais des heures à rechercher, je l'obtiens maintenant en quelques secondes, contextualisé et pertinent.</p>
-        <div class="testi-footer">
-          <div class="testi-avatar">TM</div>
-          <div>
-            <div class="testi-author">Thomas M.</div>
-            <div class="testi-role">Étudiant en ingénierie, Paris</div>
-          </div>
-        </div>
+        <div class="tc-quote">"</div>
+        <p class="tc-text">Après mon opération du cœur, je rentrais chez moi avec beaucoup d'appréhension. Sophie est venue dès le lendemain faire mes courses. Ça m'a enlevé un poids énorme.</p>
+        <div class="tc-by"><div class="tc-av">👨</div><div><strong>Jacques, 74 ans</strong><span>Lyon · Post-chirurgie cardiaque</span></div></div>
+      </div>
+      <div class="testi-card featured">
+        <div class="tc-quote">"</div>
+        <p class="tc-text">Mon rôle de bénévole P.HOSPI a transformé ma retraite. Chaque mission est un moment de connexion authentique avec des personnes qui ont vraiment besoin d'aide.</p>
+        <div class="tc-by"><div class="tc-av">👩</div><div><strong>Michèle, 61 ans</strong><span>Bénévole · Paris · 8 mois</span></div></div>
       </div>
       <div class="testi-card">
-        <div class="testi-stars">
-          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
+        <div class="tc-quote">"</div>
+        <p class="tc-text">J'habitais seule et ne voulais pas inquiéter mes enfants. Grâce à P.HOSPI, j'ai gardé mon indépendance tout en étant accompagnée. Exactement ce dont j'avais besoin.</p>
+        <div class="tc-by"><div class="tc-av">👵</div><div><strong>Andrée, 80 ans</strong><span>Bordeaux · Convalescence fracture</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <div class="cta-section" id="cta">
+    <div class="cta-left">
+      <div class="cta-eyebrow">Rejoindre P.HOSPI</div>
+      <h2 class="cta-h2">Un retour à la maison<br><span class="cta-h2-it">ne devrait pas être une épreuve.</span></h2>
+      <p class="cta-p">Que vous cherchiez de l'aide ou que vous souhaitiez en apporter, P.HOSPI vous accueille. Inscription gratuite, sans engagement.</p>
+    </div>
+    <div class="cta-right">
+      <button class="btn-hero-w" onclick="goTo('patient')"><span>Je cherche de l'aide</span><span>→</span></button>
+      <button class="btn-hero-ghost" onclick="goTo('volunteer')"><span>Devenir bénévole</span><span>→</span></button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="ft-col">
+      <div class="ft-brand"><div class="ft-cross"></div><div class="ft-name">P.HOSPI</div></div>
+      <p class="ft-tagline">Plateforme d'entraide post-hospitalisation, programme officiel de la Croix-Rouge Française.</p>
+      <div class="ft-copy">© 2025 P.HOSPI · Croix-Rouge Française</div>
+    </div>
+    <div class="ft-col">
+      <div class="ft-links-h">Navigation</div>
+      <ul class="ft-links">
+        <li><a href="#" onclick="scrollAnchor('how');return false">Fonctionnement</a></li>
+        <li><a href="#" onclick="scrollAnchor('services');return false">Nos services</a></li>
+        <li><a href="#" onclick="scrollAnchor('for-who');return false">Pour les patients</a></li>
+        <li><a href="#" onclick="goTo('volunteer');return false">Devenir bénévole</a></li>
+        <li><a href="#" onclick="scrollAnchor('testi');return false">Témoignages</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <div class="ft-links-h">Informations</div>
+      <ul class="ft-links">
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Politique de confidentialité</a></li>
+        <li><a href="#">Accessibilité</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Croix-Rouge Française</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  </div>
+</div><!-- /page-landing -->
+
+
+<!-- ══════════════════════════════════════════
+   PAGE PATIENT
+══════════════════════════════════════════ -->
+<div class="page" id="page-patient">
+  <div class="form-page">
+    <aside class="fsb p-fsb">
+      <div class="fsb-inner">
+        <div class="fsb-chip"><div class="fsb-chip-cross"></div>Inscription Patient</div>
+        <div class="fsb-title">Demandez de l'aide</div>
+        <span class="fsb-title-it">à domicile.</span>
+        <p class="fsb-desc">Remplissez ce formulaire pour être accompagné(e) dès votre retour à la maison. Un coordinateur vous contactera sous 24h.</p>
+        <div class="fsb-steps" id="pSteps">
+          <div class="fsb-step active" data-s="1"><div class="fsb-num">01</div><div class="fsb-step-info"><strong>Identité</strong><span>Informations personnelles</span></div></div>
+          <div class="fsb-step" data-s="2"><div class="fsb-num">02</div><div class="fsb-step-info"><strong>Situation médicale</strong><span>Votre hospitalisation</span></div></div>
+          <div class="fsb-step" data-s="3"><div class="fsb-num">03</div><div class="fsb-step-info"><strong>Besoins</strong><span>Quelles aides souhaitez-vous ?</span></div></div>
+          <div class="fsb-step" data-s="4"><div class="fsb-num">04</div><div class="fsb-step-info"><strong>Entourage</strong><span>Contact d'urgence</span></div></div>
         </div>
-        <p class="testi-text">Un outil révolutionnaire pour mes recherches. La précision des réponses et la rapidité du système sont remarquables.</p>
-        <div class="testi-footer">
-          <div class="testi-avatar">SL</div>
-          <div>
-            <div class="testi-author">Sophie L.</div>
-            <div class="testi-role">Chercheuse en neurosciences, Lyon</div>
+      </div>
+      <div class="fsb-foot"><div class="fsb-foot-cross"></div><div class="fsb-foot-text">Soutenu par la<br>Croix-Rouge Française</div></div>
+    </aside>
+
+    <div class="farea">
+      <div class="farea-inner">
+        <div class="fprog"><div class="fprog-fill" id="pBar" style="width:25%"></div></div>
+
+        <!-- P1 -->
+        <div class="step-panel active" id="pp1">
+          <div class="pn-head"><div class="pn-step-label">Étape 01 / 04</div><h2 class="pn-title">Vos informations personnelles</h2><p class="pn-desc">Ces informations permettent de vous identifier et de vous contacter rapidement.</p></div>
+          <div class="fg fg-2">
+            <div class="fgrp"><label class="flbl">Civilité <span class="req">*</span></label><select><option>— Sélectionner —</option><option>Madame</option><option>Monsieur</option><option>Autre</option></select></div>
+            <div class="fgrp"><label class="flbl">Date de naissance <span class="req">*</span></label><input type="date"></div>
+            <div class="fgrp"><label class="flbl">Prénom <span class="req">*</span></label><input type="text" placeholder="ex : Marie"></div>
+            <div class="fgrp"><label class="flbl">Nom <span class="req">*</span></label><input type="text" placeholder="ex : Dupont"></div>
+            <div class="fgrp"><label class="flbl">Téléphone <span class="req">*</span></label><input type="tel" placeholder="06 12 34 56 78"></div>
+            <div class="fgrp"><label class="flbl">Email</label><input type="email" placeholder="marie.dupont@email.fr"><span class="fhint">Facultatif — pour recevoir un récapitulatif</span></div>
           </div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">
-          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
-        </div>
-        <p class="testi-text">Je prends de meilleures décisions en réunion, avec des données fiables accessibles en temps réel. Indispensable.</p>
-        <div class="testi-footer">
-          <div class="testi-avatar">AD</div>
-          <div>
-            <div class="testi-author">Amina D.</div>
-            <div class="testi-role">Directrice financière, Nantes</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">
-          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
-        </div>
-        <p class="testi-text">L'intégration est tellement naturelle qu'on oublie qu'on porte un dispositif. C'est une mémoire augmentée qui ne fatigue jamais.</p>
-        <div class="testi-footer">
-          <div class="testi-avatar">RB</div>
-          <div>
-            <div class="testi-author">Romain B.</div>
-            <div class="testi-role">Designer industriel, Bordeaux</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- CTA -->
-<section id="cta">
-  <div class="section-inner" style="position:relative;z-index:1">
-    <div class="cta-label">Rejoignez l'expérience</div>
-    <h2 class="cta-title">Découvrez l'avenir<br>de la connaissance.</h2>
-    <p class="cta-desc">Rejoignez les premiers utilisateurs et entrez dans une nouvelle ère du savoir humain. La liste d'attente est ouverte.</p>
-    <div class="cta-actions">
-      <a href="#" onclick="openModal();return false;" class="btn-primary-dark">Rejoindre la liste d'attente</a>
-      <a href="#presentation" class="btn-ghost-light">En savoir plus</a>
-    </div>
-    <div style="margin-top:3rem; display:flex; gap:0.5rem; justify-content:center;">
-      <div style="width:40px; height:4px; border-radius:2px; background:#fff; opacity:0.3;"></div>
-      <div style="width:40px; height:4px; border-radius:2px; background:#fff; opacity:0.3;"></div>
-      <div style="width:40px; height:4px; border-radius:2px; background:var(--yellow); opacity:0.8;"></div>
-      <div style="width:40px; height:4px; border-radius:2px; background:#fff; opacity:0.3;"></div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div>
-    <div class="footer-brand">Terminal <span>Akasha</span></div>
-    <p class="footer-tagline">Innovation technologique pour un monde plus intelligent. La connaissance, instantanément.</p>
-    <div class="footer-g-strip">
-      <div style="background:var(--blue)"></div>
-      <div style="background:var(--red)"></div>
-      <div style="background:var(--yellow)"></div>
-      <div style="background:var(--green)"></div>
-    </div>
-  </div>
-  <div>
-    <div class="footer-col-title">Produit</div>
-    <ul class="footer-links">
-      <li><a href="#">Présentation</a></li>
-      <li><a href="#">Fonctionnalités</a></li>
-      <li><a href="#">Technologie</a></li>
-      <li><a href="#">Sécurité</a></li>
-    </ul>
-  </div>
-  <div>
-    <div class="footer-col-title">Entreprise</div>
-    <ul class="footer-links">
-      <li><a href="#">À propos</a></li>
-      <li><a href="#">Vision & Éthique</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-  </div>
-  <div>
-    <div class="footer-col-title">Légal</div>
-    <ul class="footer-links">
-      <li><a href="#">Support</a></li>
-      <li><a href="#">Confidentialité</a></li>
-      <li><a href="#">Conditions</a></li>
-      <li><a href="#">Mentions légales</a></li>
-    </ul>
-  </div>
-</footer>
-<div class="footer-bottom">
-  <span class="footer-copy">© 2025 Terminal Akasha. Tous droits réservés.</span>
-  <span class="footer-copy">La connaissance, instantanément.</span>
-</div>
-
-<!-- ============ MODAL INSCRIPTION ============ -->
-<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
-  <div class="modal-box">
-
-    <!-- LEFT PANEL -->
-    <div class="modal-left">
-      <div class="mblob mblob-1"></div>
-      <div class="mblob mblob-2"></div>
-      <div class="mblob mblob-3"></div>
-      <div class="modal-logo"><div class="modal-logo-dot"></div>Terminal Akasha</div>
-      <div class="modal-mg-strip">
-        <div style="background:var(--yellow)"></div>
-        <div style="background:var(--red)"></div>
-        <div style="background:rgba(255,255,255,0.5)"></div>
-        <div style="background:var(--green)"></div>
-      </div>
-      <h2 class="modal-left-title">Rejoignez l'ère du savoir <span>instantané</span></h2>
-      <p class="modal-left-desc">Plus de 12 000 personnes attendent déjà. Soyez parmi les premiers utilisateurs d'Akasha One.</p>
-      <div class="modal-perks">
-        <div class="modal-perk">
-          <div class="modal-perk-icon">🎯</div>
-          <div><div class="modal-perk-label">Accès prioritaire</div><div class="modal-perk-sub">Premiers à recevoir l'oreillette Akasha One.</div></div>
-        </div>
-        <div class="modal-perk">
-          <div class="modal-perk-icon">🎓</div>
-          <div><div class="modal-perk-label">3 mois offerts</div><div class="modal-perk-sub">Abonnement Education gratuit pour les premiers inscrits.</div></div>
-        </div>
-        <div class="modal-perk">
-          <div class="modal-perk-icon">🔒</div>
-          <div><div class="modal-perk-label">100% sécurisé</div><div class="modal-perk-sub">Données chiffrées, conformité RGPD garantie.</div></div>
-        </div>
-      </div>
-      <div class="modal-left-quote">
-        <p>« Accéder instantanément à tout le savoir du monde. »</p>
-        <cite>— Mission Terminal Akasha</cite>
-      </div>
-    </div>
-
-    <!-- RIGHT PANEL -->
-    <div class="modal-right">
-      <button class="modal-close" onclick="closeModal()" title="Fermer">✕</button>
-
-      <!-- Steps dots -->
-      <div class="m-steps-indicator" id="mStepsIndicator">
-        <div class="m-step-dot active" id="mdot1"></div>
-        <div class="m-step-dot" id="mdot2"></div>
-        <div class="m-step-dot" id="mdot3"></div>
-      </div>
-
-      <!-- SUCCESS -->
-      <div class="m-success" id="mSuccess">
-        <div class="m-success-icon">✅</div>
-        <h2 class="m-success-title">Bienvenue dans<br>la liste d'attente !</h2>
-        <p class="m-success-sub">Votre inscription a bien été enregistrée. Vous recevrez un e-mail de confirmation dans quelques minutes.</p>
-        <div class="m-success-badge"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;"></span>Inscription confirmée</div>
-        <div class="m-success-number" id="mWaitlistNumber">12 000</div>
-        <div class="m-success-number-label">personnes dans la liste d'attente</div>
-        <br>
-        <button class="m-close-btn" onclick="closeModal()">← Retour au site</button>
-      </div>
-
-      <!-- FORM PAGES -->
-      <div id="mFormPages">
-
-        <!-- PAGE 1 -->
-        <div class="m-form-page active" id="mpage1">
-          <div class="m-form-eyebrow">Étape 1 sur 3</div>
-          <h2 class="m-form-title">Créer votre compte</h2>
-          <p class="m-form-sub">Commençons par vos informations de base.</p>
-
-          <div class="m-profil-label">Votre profil</div>
-          <div class="m-profil-grid">
-            <div class="m-profil-btn" onclick="mSelectProfil(this)"><span class="m-profil-emoji">🎓</span>Étudiant</div>
-            <div class="m-profil-btn" onclick="mSelectProfil(this)"><span class="m-profil-emoji">🔬</span>Chercheur</div>
-            <div class="m-profil-btn" onclick="mSelectProfil(this)"><span class="m-profil-emoji">💼</span>Professionnel</div>
-            <div class="m-profil-btn" onclick="mSelectProfil(this)"><span class="m-profil-emoji">🏫</span>Enseignant</div>
-            <div class="m-profil-btn" onclick="mSelectProfil(this)"><span class="m-profil-emoji">🏥</span>Médecin</div>
-            <div class="m-profil-btn" onclick="mSelectProfil(this)"><span class="m-profil-emoji">👤</span>Autre</div>
-          </div>
-
-          <div class="m-form-row">
-            <div class="m-form-group no-mb">
-              <label class="m-label" for="mPrenom">Prénom</label>
-              <div class="m-icon-wrap"><span class="m-field-icon">👤</span><input class="m-input" type="text" id="mPrenom" placeholder="Marie"></div>
-            </div>
-            <div class="m-form-group no-mb">
-              <label class="m-label" for="mNom">Nom</label>
-              <input class="m-input" type="text" id="mNom" placeholder="Dupont">
+          <div class="fdiv"></div><div class="fdiv-lbl">Adresse de domicile</div>
+          <div class="fg">
+            <div class="fgrp full"><label class="flbl">Adresse <span class="req">*</span></label><input type="text" placeholder="Numéro et nom de rue"></div>
+            <div class="fg fg-3" style="grid-column:1/-1">
+              <div class="fgrp"><label class="flbl">Code postal <span class="req">*</span></label><input type="text" placeholder="75001"></div>
+              <div class="fgrp"><label class="flbl">Ville <span class="req">*</span></label><input type="text" placeholder="Paris"></div>
+              <div class="fgrp"><label class="flbl">Étage / Digicode</label><input type="text" placeholder="3e · A456"></div>
             </div>
           </div>
-          <div class="m-form-group" style="margin-top:0.8rem">
-            <label class="m-label" for="mEmail">Adresse e-mail</label>
-            <div class="m-icon-wrap"><span class="m-field-icon">✉️</span><input class="m-input" type="email" id="mEmail" placeholder="marie.dupont@exemple.fr"></div>
-          </div>
-          <button class="m-submit-btn" onclick="mGoToPage(2)">Continuer →</button>
-          <p style="text-align:center;font-size:0.72rem;color:var(--muted);margin-top:0.8rem;">Déjà inscrit ? <a href="#" style="color:var(--blue);font-weight:600;text-decoration:none;">Se connecter</a></p>
+          <div class="faction"><div></div><button class="btn-next" onclick="pN(1)">Continuer →</button></div>
         </div>
 
-        <!-- PAGE 2 -->
-        <div class="m-form-page" id="mpage2">
-          <div class="m-form-eyebrow">Étape 2 sur 3</div>
-          <h2 class="m-form-title">Votre institution</h2>
-          <p class="m-form-sub">Personnalisez votre expérience Akasha.</p>
-
-          <div class="m-form-group">
-            <label class="m-label" for="mInstitution">Institution / Entreprise</label>
-            <div class="m-icon-wrap"><span class="m-field-icon">🏛️</span><input class="m-input" type="text" id="mInstitution" placeholder="Université Paris-Saclay, Google France…"></div>
-          </div>
-          <div class="m-form-row">
-            <div class="m-form-group no-mb">
-              <label class="m-label" for="mPays">Pays</label>
-              <select class="m-select" id="mPays" onchange="this.classList.add('filled')">
-                <option value="" disabled selected>Sélectionner</option>
-                <option>🇫🇷 France</option><option>🇧🇪 Belgique</option><option>🇨🇭 Suisse</option><option>🇨🇦 Canada</option><option>🇲🇦 Maroc</option><option>Autre</option>
-              </select>
+        <!-- P2 -->
+        <div class="step-panel" id="pp2">
+          <div class="pn-head"><div class="pn-step-label">Étape 02 / 04</div><h2 class="pn-title">Votre situation médicale</h2><p class="pn-desc">Ces informations restent strictement confidentielles et permettent d'adapter l'aide proposée.</p></div>
+          <div class="fg">
+            <div class="fg fg-2" style="grid-column:1/-1">
+              <div class="fgrp"><label class="flbl">Établissement de soin <span class="req">*</span></label><input type="text" placeholder="ex : CHU de Lyon, Clinique Saint-Joseph…"></div>
+              <div class="fgrp"><label class="flbl">Date de sortie prévue <span class="req">*</span></label><input type="date"></div>
             </div>
-            <div class="m-form-group no-mb">
-              <label class="m-label" for="mUsage">Usage principal</label>
-              <select class="m-select" id="mUsage" onchange="this.classList.add('filled')">
-                <option value="" disabled selected>Sélectionner</option>
-                <option>Études & Formation</option><option>Recherche scientifique</option><option>Usage professionnel</option><option>Usage personnel</option>
-              </select>
+            <div class="fgrp full"><label class="flbl">Type d'hospitalisation <span class="req">*</span></label>
+              <div class="ropts">
+                <label class="ropt"><input type="radio" name="ht"> Chirurgie / Opération</label>
+                <label class="ropt"><input type="radio" name="ht"> Problème cardiaque</label>
+                <label class="ropt"><input type="radio" name="ht"> Orthopédie / Fracture</label>
+                <label class="ropt"><input type="radio" name="ht"> Neurologique</label>
+                <label class="ropt"><input type="radio" name="ht"> Oncologie</label>
+                <label class="ropt"><input type="radio" name="ht"> Autre</label>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Niveau de mobilité à la sortie <span class="req">*</span></label>
+              <div class="ropts">
+                <label class="ropt"><input type="radio" name="mob"> 🚶 Autonome</label>
+                <label class="ropt"><input type="radio" name="mob"> 🦯 Avec aide (canne, déambulateur)</label>
+                <label class="ropt"><input type="radio" name="mob"> 🛞 En fauteuil roulant</label>
+                <label class="ropt"><input type="radio" name="mob"> 🛏️ Alitement partiel</label>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Informations médicales complémentaires</label><textarea placeholder="Prescriptions, allergies, recommandations du médecin… (facultatif)"></textarea><span class="fhint">Partagées uniquement avec votre coordinateur, pas avec les bénévoles.</span></div>
+          </div>
+          <div class="faction"><button class="btn-prev" onclick="pP(2)">← Retour</button><button class="btn-next" onclick="pN(2)">Continuer →</button></div>
+        </div>
+
+        <!-- P3 -->
+        <div class="step-panel" id="pp3">
+          <div class="pn-head"><div class="pn-step-label">Étape 03 / 04</div><h2 class="pn-title">Vos besoins à domicile</h2><p class="pn-desc">Sélectionnez les aides souhaitées. Vous pouvez en choisir plusieurs.</p></div>
+          <div class="fg">
+            <div class="fgrp full"><label class="flbl">Services souhaités <span class="req">*</span></label>
+              <div class="svc-sel">
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">🛒</span><span class="svc-sel-nm">Courses</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">🤝</span><span class="svc-sel-nm">Présence</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">🧹</span><span class="svc-sel-nm">Ménage léger</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">🚗</span><span class="svc-sel-nm">Transport</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">💊</span><span class="svc-sel-nm">Rappels médicaments</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">📞</span><span class="svc-sel-nm">Lien famille</span></div>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Urgence de la demande <span class="req">*</span></label>
+              <div class="urg-row">
+                <div class="urg-btn" onclick="selUrg(this,'p')"><span class="ul">🔴 Urgent</span><span class="us">Dans les 24–48h</span></div>
+                <div class="urg-btn" onclick="selUrg(this,'p')"><span class="ul">🟡 Cette semaine</span><span class="us">Dans les 5–7 jours</span></div>
+                <div class="urg-btn" onclick="selUrg(this,'p')"><span class="ul">🟢 Planifié</span><span class="us">Dans les 2 semaines</span></div>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Fréquence souhaitée</label>
+              <div class="ropts">
+                <label class="ropt"><input type="radio" name="freq"> Ponctuel (1–2 fois)</label>
+                <label class="ropt"><input type="radio" name="freq"> Hebdomadaire</label>
+                <label class="ropt"><input type="radio" name="freq"> Plusieurs fois / semaine</label>
+                <label class="ropt"><input type="radio" name="freq"> Quotidien</label>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Précisions</label><textarea placeholder="Contraintes horaires, préférences, informations complémentaires… (facultatif)"></textarea></div>
+          </div>
+          <div class="faction"><button class="btn-prev" onclick="pP(3)">← Retour</button><button class="btn-next" onclick="pN(3)">Continuer →</button></div>
+        </div>
+
+        <!-- P4 -->
+        <div class="step-panel" id="pp4">
+          <div class="pn-head"><div class="pn-step-label">Étape 04 / 04</div><h2 class="pn-title">Votre entourage</h2><p class="pn-desc">Un contact d'urgence et quelques informations sur votre situation personnelle.</p></div>
+          <div class="fg">
+            <div class="fdiv-lbl">Contact d'urgence</div>
+            <div class="fg fg-2" style="grid-column:1/-1">
+              <div class="fgrp"><label class="flbl">Prénom et nom <span class="req">*</span></label><input type="text" placeholder="ex : Jean Dupont"></div>
+              <div class="fgrp"><label class="flbl">Lien de parenté <span class="req">*</span></label><select><option>— Sélectionner —</option><option>Conjoint(e)</option><option>Fils / Fille</option><option>Frère / Sœur</option><option>Ami(e) proche</option><option>Voisin(e)</option><option>Autre</option></select></div>
+              <div class="fgrp"><label class="flbl">Téléphone <span class="req">*</span></label><input type="tel" placeholder="06 12 34 56 78"></div>
+              <div class="fgrp"><label class="flbl">Email</label><input type="email" placeholder="jean.dupont@email.fr"></div>
+            </div>
+            <div class="fdiv" style="grid-column:1/-1"></div>
+            <div class="fdiv-lbl" style="grid-column:1/-1">Situation personnelle</div>
+            <div class="fgrp full"><label class="flbl">Vivez-vous seul(e) ? <span class="req">*</span></label>
+              <div class="ropts">
+                <label class="ropt"><input type="radio" name="alone"> Oui, seul(e)</label>
+                <label class="ropt"><input type="radio" name="alone"> Avec mon conjoint</label>
+                <label class="ropt"><input type="radio" name="alone"> Avec ma famille</label>
+                <label class="ropt"><input type="radio" name="alone"> Autre</label>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Suivi à domicile existant ?</label>
+              <div class="ropts">
+                <label class="ropt"><input type="radio" name="suivi"> Non, aucun</label>
+                <label class="ropt"><input type="radio" name="suivi"> Infirmier(e) à domicile</label>
+                <label class="ropt"><input type="radio" name="suivi"> Kinésithérapeute</label>
+                <label class="ropt"><input type="radio" name="suivi"> Aide à domicile existante</label>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Commentaires libres</label><textarea placeholder="Toute information utile pour votre accompagnement…"></textarea></div>
+            <div class="fgrp full">
+              <label class="consent-row"><input type="checkbox"><span>J'accepte que mes informations soient transmises aux bénévoles P.HOSPI pour l'organisation des aides, conformément à la politique de confidentialité de la Croix-Rouge Française.</span></label>
             </div>
           </div>
-          <div class="m-form-group" style="margin-top:0.8rem">
-            <label class="m-label" for="mPwd">Mot de passe</label>
-            <div class="m-icon-wrap"><span class="m-field-icon">🔒</span><input class="m-input" type="password" id="mPwd" placeholder="Au moins 8 caractères" oninput="mCheckPwd(this.value)"></div>
-            <div class="m-pwd-strength"><div class="m-pwd-bar" id="mbar1"></div><div class="m-pwd-bar" id="mbar2"></div><div class="m-pwd-bar" id="mbar3"></div><div class="m-pwd-bar" id="mbar4"></div></div>
-          </div>
-          <div class="m-btn-row">
-            <button class="m-btn-back" onclick="mGoToPage(1)">← Retour</button>
-            <button class="m-submit-btn m-btn-next" onclick="mGoToPage(3)">Continuer →</button>
-          </div>
+          <div class="faction"><button class="btn-prev" onclick="pP(4)">← Retour</button><button class="btn-submit" onclick="pSub()">Envoyer ma demande ✓</button></div>
         </div>
 
-        <!-- PAGE 3 -->
-        <div class="m-form-page" id="mpage3">
-          <div class="m-form-eyebrow">Étape 3 sur 3</div>
-          <h2 class="m-form-title">Presque terminé !</h2>
-          <p class="m-form-sub">Confirmez vos préférences pour finaliser.</p>
-
-          <div class="m-notif-box">
-            <div class="m-notif-title">NOTIFICATIONS</div>
-            <div class="m-consent-row" style="margin-bottom:0.6rem"><input type="checkbox" id="mNotif1" checked><div class="m-consent-text">Recevoir les actualités et mises à jour d'Akasha par e-mail</div></div>
-            <div class="m-consent-row" style="margin-bottom:0.6rem"><input type="checkbox" id="mNotif2" checked><div class="m-consent-text">Être notifié en avant-première du lancement Akasha One</div></div>
-            <div class="m-consent-row" style="margin-bottom:0"><input type="checkbox" id="mNotif3"><div class="m-consent-text">Participer au programme bêta-testeurs (places limitées)</div></div>
+        <!-- Succès patient -->
+        <div class="success-scr" id="pSuccess">
+          <div class="succ-crf-cross"></div>
+          <h2 class="succ-h">Demande enregistrée !</h2>
+          <p class="succ-sub">Bienvenue dans le réseau P.HOSPI</p>
+          <p class="succ-p">Un coordinateur P.HOSPI vous contactera dans les <strong>24 heures</strong> pour confirmer votre accompagnement et planifier les premières interventions à domicile.</p>
+          <div class="succ-tags">
+            <div class="succ-tag">📞 Appel sous 24h</div>
+            <div class="succ-tag">📋 Plan personnalisé</div>
+            <div class="succ-tag">🤝 Mise en relation</div>
           </div>
+          <button class="btn-red" onclick="goTo('landing')">Retour à l'accueil →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-patient -->
 
-          <div class="m-consent-row"><input type="checkbox" id="mRgpd" required><div class="m-consent-text">J'accepte les <a href="#">Conditions d'utilisation</a> et la <a href="#">Politique de confidentialité</a>. Conformité RGPD garantie.</div></div>
-          <div class="m-consent-row"><input type="checkbox" id="mAge"><div class="m-consent-text">Je certifie avoir au moins 16 ans (ou disposer du consentement d'un parent ou tuteur).</div></div>
 
-          <div class="m-security-note">
-            <span style="font-size:0.9rem;flex-shrink:0;margin-top:0.1rem;">🔐</span>
-            <p>Données chiffrées AES-256, jamais revendues. Suppression possible à tout moment.</p>
+<!-- ══════════════════════════════════════════
+   PAGE BÉNÉVOLE
+══════════════════════════════════════════ -->
+<div class="page" id="page-volunteer">
+  <div class="form-page">
+    <aside class="fsb v-fsb">
+      <div class="fsb-inner">
+        <div class="fsb-chip"><div class="fsb-chip-cross"></div>Inscription Bénévole</div>
+        <div class="fsb-title">Rejoignez</div>
+        <span class="fsb-title-it">le réseau P.HOSPI.</span>
+        <p class="fsb-desc">Devenez bénévole Croix-Rouge et aidez des personnes à retrouver leur autonomie après une hospitalisation. À votre rythme.</p>
+        <div class="fsb-steps" id="vSteps">
+          <div class="fsb-step active" data-s="1"><div class="fsb-num">01</div><div class="fsb-step-info"><strong>Identité</strong><span>Informations personnelles</span></div></div>
+          <div class="fsb-step" data-s="2"><div class="fsb-num">02</div><div class="fsb-step-info"><strong>Disponibilités</strong><span>Créneaux et secteur</span></div></div>
+          <div class="fsb-step" data-s="3"><div class="fsb-num">03</div><div class="fsb-step-info"><strong>Compétences</strong><span>Services proposés</span></div></div>
+          <div class="fsb-step" data-s="4"><div class="fsb-num">04</div><div class="fsb-step-info"><strong>Engagement</strong><span>Charte bénévole CRF</span></div></div>
+        </div>
+      </div>
+      <div class="fsb-foot"><div class="fsb-foot-cross"></div><div class="fsb-foot-text">Soutenu par la<br>Croix-Rouge Française</div></div>
+    </aside>
+
+    <div class="farea">
+      <div class="farea-inner">
+        <div class="fprog"><div class="fprog-fill" id="vBar" style="width:25%"></div></div>
+
+        <!-- V1 -->
+        <div class="step-panel active" id="vp1">
+          <div class="pn-head"><div class="pn-step-label">Étape 01 / 04</div><h2 class="pn-title">Vos informations personnelles</h2><p class="pn-desc">Pour créer votre profil bénévole sur la plateforme P.HOSPI.</p></div>
+          <div class="fg fg-2">
+            <div class="fgrp"><label class="flbl">Civilité <span class="req">*</span></label><select><option>— Sélectionner —</option><option>Madame</option><option>Monsieur</option><option>Autre</option></select></div>
+            <div class="fgrp"><label class="flbl">Date de naissance <span class="req">*</span></label><input type="date"></div>
+            <div class="fgrp"><label class="flbl">Prénom <span class="req">*</span></label><input type="text" placeholder="ex : Sophie"></div>
+            <div class="fgrp"><label class="flbl">Nom <span class="req">*</span></label><input type="text" placeholder="ex : Martin"></div>
+            <div class="fgrp"><label class="flbl">Téléphone <span class="req">*</span></label><input type="tel" placeholder="06 12 34 56 78"></div>
+            <div class="fgrp"><label class="flbl">Email <span class="req">*</span></label><input type="email" placeholder="sophie.martin@email.fr"></div>
           </div>
-
-          <div class="m-btn-row">
-            <button class="m-btn-back" onclick="mGoToPage(2)">← Retour</button>
-            <button class="m-submit-btn m-btn-next" style="background:linear-gradient(135deg,var(--blue),var(--green))" onclick="mSubmitForm()">🚀 Rejoindre la liste</button>
+          <div class="fdiv"></div><div class="fdiv-lbl">Adresse</div>
+          <div class="fg">
+            <div class="fgrp full"><label class="flbl">Adresse <span class="req">*</span></label><input type="text" placeholder="Numéro et nom de rue"></div>
+            <div class="fg fg-2" style="grid-column:1/-1">
+              <div class="fgrp"><label class="flbl">Code postal <span class="req">*</span></label><input type="text" placeholder="75001"></div>
+              <div class="fgrp"><label class="flbl">Ville <span class="req">*</span></label><input type="text" placeholder="Paris"></div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Véhicule personnel ?</label>
+              <div class="ropts">
+                <label class="ropt"><input type="radio" name="veh"> 🚗 Oui</label>
+                <label class="ropt"><input type="radio" name="veh"> 🚶 Non</label>
+                <label class="ropt"><input type="radio" name="veh"> 🚲 Vélo / Trottinette</label>
+              </div>
+            </div>
           </div>
+          <div class="faction"><div></div><button class="btn-next" onclick="vN(1)">Continuer →</button></div>
         </div>
 
-      </div><!-- /mFormPages -->
-    </div><!-- /modal-right -->
-  </div><!-- /modal-box -->
-</div><!-- /modal-overlay -->
+        <!-- V2 -->
+        <div class="step-panel" id="vp2">
+          <div class="pn-head"><div class="pn-step-label">Étape 02 / 04</div><h2 class="pn-title">Vos disponibilités</h2><p class="pn-desc">Indiquez quand vous êtes disponible et dans quel secteur vous souhaitez intervenir.</p></div>
+          <div class="fg">
+            <div class="fgrp full"><label class="flbl">Créneaux disponibles <span class="req">*</span></label>
+              <div class="dispo-grid">
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Lundi</span><span class="dt">Matin</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Lundi</span><span class="dt">Après-midi</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Mardi</span><span class="dt">Matin</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Mardi</span><span class="dt">Après-midi</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Mercredi</span><span class="dt">Matin</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Mercredi</span><span class="dt">Après-midi</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Jeudi</span><span class="dt">Matin</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Jeudi</span><span class="dt">Après-midi</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Vendredi</span><span class="dt">Matin</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Vendredi</span><span class="dt">Après-midi</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Samedi</span><span class="dt">Journée</span></div>
+                <div class="dispo-btn" onclick="this.classList.toggle('selected')"><span class="dd">Dimanche</span><span class="dt">Journée</span></div>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Heures max / semaine <span class="req">*</span></label>
+              <div class="ropts">
+                <label class="ropt"><input type="radio" name="hrs"> Moins de 2h</label>
+                <label class="ropt"><input type="radio" name="hrs"> 2h à 5h</label>
+                <label class="ropt"><input type="radio" name="hrs"> 5h à 10h</label>
+                <label class="ropt"><input type="radio" name="hrs"> Plus de 10h</label>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Rayon d'intervention <span class="req">*</span></label>
+              <div class="ropts">
+                <label class="ropt"><input type="radio" name="ray"> À pied (< 2 km)</label>
+                <label class="ropt"><input type="radio" name="ray"> Proche (< 5 km)</label>
+                <label class="ropt"><input type="radio" name="ray"> Secteur élargi (< 15 km)</label>
+                <label class="ropt"><input type="radio" name="ray"> Toute la ville</label>
+              </div>
+            </div>
+          </div>
+          <div class="faction"><button class="btn-prev" onclick="vP(2)">← Retour</button><button class="btn-next" onclick="vN(2)">Continuer →</button></div>
+        </div>
+
+        <!-- V3 -->
+        <div class="step-panel" id="vp3">
+          <div class="pn-head"><div class="pn-step-label">Étape 03 / 04</div><h2 class="pn-title">Vos compétences & services</h2><p class="pn-desc">Quelles aides pouvez-vous apporter ? Sélectionnez tout ce qui vous correspond.</p></div>
+          <div class="fg">
+            <div class="fgrp full"><label class="flbl">Services que vous pouvez assurer <span class="req">*</span></label>
+              <div class="svc-sel">
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">🛒</span><span class="svc-sel-nm">Courses</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">🤝</span><span class="svc-sel-nm">Présence</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">🧹</span><span class="svc-sel-nm">Ménage léger</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">🚗</span><span class="svc-sel-nm">Transport</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">💊</span><span class="svc-sel-nm">Rappels médicaments</span></div>
+                <div class="svc-sel-btn" onclick="this.classList.toggle('selected')"><span class="svc-sel-ic">📞</span><span class="svc-sel-nm">Lien famille</span></div>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Expérience médico-sociale</label>
+              <div class="ropts">
+                <label class="ropt"><input type="radio" name="exp"> Non, aucune</label>
+                <label class="ropt"><input type="radio" name="exp"> Expérience personnelle (proche aidant)</label>
+                <label class="ropt"><input type="radio" name="exp"> Expérience professionnelle</label>
+                <label class="ropt"><input type="radio" name="exp"> Bénévolat antérieur</label>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Langues parlées</label>
+              <div class="chopts">
+                <label class="copt"><input type="checkbox"> Anglais</label>
+                <label class="copt"><input type="checkbox"> Arabe</label>
+                <label class="copt"><input type="checkbox"> Espagnol</label>
+                <label class="copt"><input type="checkbox"> Portugais</label>
+                <label class="copt"><input type="checkbox"> Autre</label>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="flbl">Motivation</label><textarea placeholder="Pourquoi souhaitez-vous rejoindre P.HOSPI ? (facultatif)"></textarea></div>
+          </div>
+          <div class="faction"><button class="btn-prev" onclick="vP(3)">← Retour</button><button class="btn-next" onclick="vN(3)">Continuer →</button></div>
+        </div>
+
+        <!-- V4 -->
+        <div class="step-panel" id="vp4">
+          <div class="pn-head"><div class="pn-step-label">Étape 04 / 04</div><h2 class="pn-title">Engagement & Charte CRF</h2><p class="pn-desc">Lisez et acceptez la charte du bénévole P.HOSPI avant de finaliser votre inscription.</p></div>
+          <div class="fg">
+            <div class="fgrp full">
+              <div class="charte-box">
+                <div class="charte-ttl">Charte du bénévole P.HOSPI — Croix-Rouge Française</div>
+                <div class="charte-txt">En rejoignant P.HOSPI, je m'engage à traiter chaque bénéficiaire avec respect, bienveillance et dignité. Je respecte la confidentialité des informations personnelles et médicales. Je n'effectue que les missions pour lesquelles j'ai été formé(e) et validé(e) par la Croix-Rouge. Je préviens mon coordinateur en cas d'indisponibilité avec un préavis raisonnable. Je signale toute situation préoccupante à l'équipe P.HOSPI.</div>
+              </div>
+            </div>
+            <div class="fgrp full"><label class="consent-row"><input type="checkbox"><span>J'ai lu et j'accepte la charte du bénévole P.HOSPI — Croix-Rouge Française.</span></label></div>
+            <div class="fgrp full"><label class="consent-row"><input type="checkbox"><span>J'accepte que mes informations soient utilisées pour la mise en relation avec les bénéficiaires, conformément à la politique de confidentialité de la Croix-Rouge Française.</span></label></div>
+            <div class="fgrp full"><label class="consent-row"><input type="checkbox"><span>Je comprends qu'une vérification de casier judiciaire (B3) pourra être demandée avant ma première mission.</span></label></div>
+            <div class="fgrp full"><label class="flbl">Comment avez-vous connu P.HOSPI ?</label><select><option>— Sélectionner —</option><option>Croix-Rouge Française</option><option>Recommandation d'un proche</option><option>Établissement de santé</option><option>Réseaux sociaux</option><option>Presse / Médias</option><option>Autre</option></select></div>
+          </div>
+          <div class="faction"><button class="btn-prev" onclick="vP(4)">← Retour</button><button class="btn-submit" onclick="vSub()">Rejoindre P.HOSPI ✓</button></div>
+        </div>
+
+        <!-- Succès bénévole -->
+        <div class="success-scr" id="vSuccess">
+          <div class="succ-crf-cross"></div>
+          <h2 class="succ-h">Bienvenue dans l'équipe !</h2>
+          <p class="succ-sub">Votre inscription bénévole est enregistrée</p>
+          <p class="succ-p">Un coordinateur P.HOSPI vous contactera sous <strong>48 heures</strong> pour valider votre profil, planifier votre formation Croix-Rouge et vous présenter vos premières missions disponibles.</p>
+          <div class="succ-tags">
+            <div class="succ-tag">📞 Contact sous 48h</div>
+            <div class="succ-tag">🎓 Formation CRF</div>
+            <div class="succ-tag">🤝 Première mission</div>
+          </div>
+          <button class="btn-red" onclick="goTo('landing')">Retour à l'accueil →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-volunteer -->
+
 
 <script>
-  // Cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
-  (function tick(){ rx+=(mx-rx)*0.15; ry+=(my-ry)*0.15; cursor.style.cssText=`left:${mx}px;top:${my}px`; ring.style.cssText=`left:${rx}px;top:${ry}px`; requestAnimationFrame(tick); })();
+/* ROUTING */
+function goTo(pg) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pg).classList.add('active');
+  window.scrollTo({ top: 0 });
+  const nl = document.getElementById('navLanding');
+  const nf = document.getElementById('navForm');
+  if (pg === 'landing') {
+    nl.style.display = 'flex'; nf.style.display = 'none';
+  } else {
+    nl.style.display = 'none'; nf.style.display = 'flex';
+    document.getElementById('navBC').textContent = pg === 'patient' ? 'Inscription Patient' : 'Inscription Bénévole';
+    if (pg === 'patient') rP(); else rV();
+  }
+}
+function scrollAnchor(id) {
+  setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
+}
 
-  // Hover color change
-  document.querySelectorAll('a,button').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.style.background = 'var(--red)');
-    el.addEventListener('mouseleave', () => cursor.style.background = 'var(--blue)');
+/* PATIENT */
+function rP() {
+  document.querySelectorAll('#page-patient .step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('pp1').classList.add('active');
+  document.getElementById('pSuccess').classList.remove('active');
+  document.getElementById('pBar').style.width = '25%';
+  sb('pSteps', 1);
+}
+function pN(n) { move('pp', n, n+1, 'pBar', 'pSteps'); }
+function pP(n) { move('pp', n, n-1, 'pBar', 'pSteps'); }
+function pSub() {
+  document.getElementById('pp4').classList.remove('active');
+  document.getElementById('pSuccess').classList.add('active');
+  document.getElementById('pBar').style.width = '100%';
+  document.querySelectorAll('#pSteps .fsb-step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); s.querySelector('.fsb-num').textContent = '✓'; });
+  top0();
+}
+
+/* VOLUNTEER */
+function rV() {
+  document.querySelectorAll('#page-volunteer .step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('vp1').classList.add('active');
+  document.getElementById('vSuccess').classList.remove('active');
+  document.getElementById('vBar').style.width = '25%';
+  sb('vSteps', 1);
+}
+function vN(n) { move('vp', n, n+1, 'vBar', 'vSteps'); }
+function vP(n) { move('vp', n, n-1, 'vBar', 'vSteps'); }
+function vSub() {
+  document.getElementById('vp4').classList.remove('active');
+  document.getElementById('vSuccess').classList.add('active');
+  document.getElementById('vBar').style.width = '100%';
+  document.querySelectorAll('#vSteps .fsb-step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); s.querySelector('.fsb-num').textContent = '✓'; });
+  top0();
+}
+
+/* HELPERS */
+function move(pfx, from, to, barId, sbId) {
+  document.getElementById(pfx + from).classList.remove('active');
+  document.getElementById(pfx + to).classList.add('active');
+  document.getElementById(barId).style.width = (to/4*100) + '%';
+  sb(sbId, to); top0();
+}
+function sb(id, step) {
+  document.querySelectorAll('#' + id + ' .fsb-step').forEach(el => {
+    const s = parseInt(el.dataset.s);
+    el.classList.remove('active', 'done');
+    if (s === step) el.classList.add('active');
+    else if (s < step) { el.classList.add('done'); el.querySelector('.fsb-num').textContent = '✓'; }
+    else { const n = el.querySelector('.fsb-num'); if (n && !isNaN(n.textContent)) return; }
   });
+}
+function top0() {
+  document.querySelector('.page.active .farea')?.scrollTo({ top: 0 });
+  window.scrollTo({ top: 0 });
+}
+function selUrg(el, t) {
+  const pg = t === 'p' ? '#page-patient' : '#page-volunteer';
+  document.querySelectorAll(pg + ' .urg-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
 
-  // Feature tabs
-  document.querySelectorAll('.feat-tab').forEach(tab=>{
-    tab.addEventListener('click',()=>{
-      document.querySelectorAll('.feat-tab').forEach(t=>t.classList.remove('active'));
-      document.querySelectorAll('.feat-panel').forEach(p=>p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('panel-'+tab.dataset.panel).classList.add('active');
-    });
-  });
-
-  // Tech accordion
-  document.querySelectorAll('.tech-item').forEach(item=>{
-    item.addEventListener('click',()=>{
-      const isOpen = item.classList.contains('open');
-      document.querySelectorAll('.tech-item').forEach(i=>{ i.classList.remove('open'); i.querySelector('.tech-detail').textContent=''; });
-      if(!isOpen){ item.classList.add('open'); item.querySelector('.tech-detail').textContent=item.dataset.detail; }
-    });
-  });
-
-  // Intersection Observer
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-  },{threshold:0.12});
-  document.querySelectorAll('.step,.case-card,.benefits-list li,.tech-item,.tech-layer,.badge,.testi-card,.vision-pillar,.timeline-item,.tv-item,.tech-pill,.biz-card').forEach(el=>obs.observe(el));
-
-  // Nav scroll highlight
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-links a');
-  window.addEventListener('scroll', ()=>{
-    let current = '';
-    sections.forEach(s=>{ if(window.scrollY >= s.offsetTop - 100) current = s.id; });
-    navLinks.forEach(a=>{ a.style.color = a.getAttribute('href') === '#'+current ? 'var(--blue)' : ''; });
-  });
-
-  // ============ MODAL ============
-  function openModal() {
-    document.getElementById('modalOverlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
-    // reset form state
-    mResetForm();
+/* Radio highlight */
+document.addEventListener('change', e => {
+  if (e.target.type === 'radio') {
+    const name = e.target.name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(i => i.closest('.ropt')?.classList.remove('selected'));
+    e.target.closest('.ropt')?.classList.add('selected');
   }
-  function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  function handleOverlayClick(e) {
-    if(e.target === document.getElementById('modalOverlay')) closeModal();
-  }
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
-
-  function mResetForm() {
-    mGoToPage(1);
-    document.querySelectorAll('.m-profil-btn').forEach(b=>b.classList.remove('selected'));
-    ['mPrenom','mNom','mEmail','mInstitution','mPwd'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-    ['mPays','mUsage'].forEach(id=>{ const el=document.getElementById(id); if(el){ el.selectedIndex=0; el.classList.remove('filled'); } });
-    ['mbar1','mbar2','mbar3','mbar4'].forEach(id=>{ const b=document.getElementById(id); if(b) b.style.background='var(--border)'; });
-    ['mNotif1','mNotif2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.checked=true; });
-    ['mNotif3','mRgpd','mAge'].forEach(id=>{ const el=document.getElementById(id); if(el) el.checked=false; });
-    document.getElementById('mFormPages').style.display='';
-    document.getElementById('mFormPages').style.opacity='';
-    document.getElementById('mStepsIndicator').style.display='';
-    document.getElementById('mStepsIndicator').style.opacity='';
-    document.getElementById('mSuccess').classList.remove('show');
-  }
-
-  function mGoToPage(n) {
-    document.querySelectorAll('.m-form-page').forEach(p=>p.classList.remove('active'));
-    document.getElementById('mpage'+n).classList.add('active');
-    for(let i=1;i<=3;i++){
-      const dot=document.getElementById('mdot'+i);
-      dot.classList.remove('active','done');
-      if(i<n) dot.classList.add('done');
-      if(i===n) dot.classList.add('active');
-    }
-  }
-
-  function mSelectProfil(el) {
-    document.querySelectorAll('.m-profil-btn').forEach(b=>b.classList.remove('selected'));
-    el.classList.add('selected');
-  }
-
-  function mCheckPwd(val) {
-    const bars=[document.getElementById('mbar1'),document.getElementById('mbar2'),document.getElementById('mbar3'),document.getElementById('mbar4')];
-    const colors=['var(--red)','var(--yellow)','var(--blue)','var(--green)'];
-    let s=0;
-    if(val.length>=6) s++;
-    if(val.length>=10) s++;
-    if(/[A-Z]/.test(val)&&/[0-9]/.test(val)) s++;
-    if(/[^A-Za-z0-9]/.test(val)) s++;
-    bars.forEach((b,i)=>{ b.style.background=i<s?colors[Math.min(s-1,3)]:'var(--border)'; });
-  }
-
-  function mSubmitForm() {
-    const rgpd=document.getElementById('mRgpd').checked;
-    if(!rgpd){ document.getElementById('mRgpd').style.outline='2px solid var(--red)'; return; }
-    const fp=document.getElementById('mFormPages');
-    const si=document.getElementById('mStepsIndicator');
-    fp.style.opacity='0'; fp.style.transform='translateY(-12px)'; fp.style.transition='all 0.35s ease';
-    si.style.opacity='0';
-    setTimeout(()=>{
-      fp.style.display='none'; si.style.display='none';
-      const s=document.getElementById('mSuccess'); s.classList.add('show');
-      let n=12000; const target=12347; const el=document.getElementById('mWaitlistNumber');
-      const interval=setInterval(()=>{ n+=Math.ceil((target-n)/8); el.textContent=n.toLocaleString('fr-FR'); if(n>=target){ el.textContent=target.toLocaleString('fr-FR'); clearInterval(interval); } },50);
-    },350);
-  }
+});
 </script>
 </body>
 </html>
